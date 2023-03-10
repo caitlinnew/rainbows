@@ -1,0 +1,50 @@
+{
+  "name": "Rainbows",
+  "description": "",
+  "spectralExtends": [],
+  "extends": [
+    "cHJqOjEyMzU4Ng",
+    "cHJqOjE4OTM4NA"
+  ],
+  "formats": [
+    "oas2",
+    "oas3",
+    "oas3.0",
+    "oas3.1"
+  ],
+  "aliases": {},
+  "rules": {},
+  "extendedStyleguides": [
+    {
+      "id": "cHJqOjEyMzU4Ng",
+      "name": "Stoplight Style Guide",
+      "slug": "stoplight-style-guide",
+      "workspace": {
+        "slug": "apistylebook",
+        "name": "API Stylebook"
+      },
+      "icon": "robot",
+      "color": "#3898ff",
+      "description": "Default rules for Stoplight projects",
+      "latestRelease": {
+        "release": 37
+      }
+    },
+    {
+      "id": "cHJqOjE4OTM4NA",
+      "name": "RainbowsSG",
+      "slug": "rainbows-sg",
+      "workspace": {
+        "domain": "caitlin-custom-test.stoplight-dev.com",
+        "slug": "caitlin",
+        "name": "caitlin"
+      },
+      "icon": "magic",
+      "color": "#EAB543",
+      "latestRelease": {
+        "release": 3
+      }
+    }
+  ],
+  "extendedDefault": true
+}
