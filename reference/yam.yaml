@@ -5,6 +5,7 @@ info:
   title: yam
   version: '1.0'
   summary: test
+  description: adsfdasf
 servers:
   - url: 'http://localhost:3000'
 paths:
