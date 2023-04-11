@@ -4,7 +4,7 @@ x-stoplight:
 info:
   title: yam
   version: '1.0'
-  summary: test
+  summary: TESTING AUTH ISSUES
   description: adsfdasf
 servers:
   - url: 'http://localhost:3000'
