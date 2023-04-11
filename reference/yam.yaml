@@ -5,7 +5,7 @@ info:
   title: yam
   version: '1.0'
   summary: TESTING AUTH ISSUES
-  description: adsfdasf
+  description: TESTING AUTH ISSUES
 servers:
   - url: 'http://localhost:3000'
 paths:
