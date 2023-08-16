@@ -1,0 +1,95 @@
+#------------------------------- ID SECTION ----------------------------------
+
+vat_rate_id:
+  description: The ID of the normal VAT rate
+  type: string
+  example: "2"
+
+venue_id:
+  description: The unique company ID
+  type: integer
+  example: 9000
+
+#------------------------------- DATA FIELD SECTION --------------------------
+
+vat_rate_name:
+  description: The name of the normal VAT rate
+  type: string
+  example: "Standard Danish VAT Rate"
+
+vat_rate_rate:
+  description: The actual normal vat rate
+  example: 25.0
+
+vat_rate_is_standard:
+  description: Determines if the vat rate is the company’s standard vat rate. There can only be one standard vat rate per company.
+  type: boolean
+  example: true
+
+#------------------------------ DATA OBJECT SECTION --------------------------
+
+vat_rate_create_object:
+  description: The data to create a vat rate
+  type: object
+  required:
+    - venue_id
+    - name
+  properties:
+    venue_id:
+      $ref: "#/venue_id"
+    name:
+      $ref: "#/vat_rate_name"
+    rate:
+      $ref: "#/vat_rate_rate"
+    is_standard:
+      $ref: "#/vat_rate_is_standard"
+
+vat_rate_read_object:
+  description: The data returned when creating, reading or updating a vat_rate
+  type: object
+  properties:
+    id:
+      $ref: "#/vat_rate_id"
+    venue_id:
+      $ref: "#/venue_id"
+    name:
+      $ref: "#/vat_rate_name"
+    rate:
+      $ref: "#/vat_rate_rate"
+    is_standard:
+      $ref: "#/vat_rate_is_standard"
+
+vat_rate_response_object:
+  description: The response when creating, reading or udpating a vat rate
+  type: object
+  properties:
+    message:
+      description: "A generic message, empty if transaction ok"
+      type: string
+      example: ""
+    data:
+      $ref: "#/vat_rate_read_object"
+
+vat_rate_update_object:
+  description: The data to update a vate rate
+  type: object
+  properties:
+    name:
+      $ref: "#/vat_rate_name"
+    rate:
+      $ref: "#/vat_rate_rate"
+    is_standard:
+      $ref: "#/vat_rate_is_standard"
+
+vat_rate_response_list:
+  description: The response when getting a vat rate list
+  type: object
+  properties:
+    message:
+      description: "A generic message, empty if transaction ok"
+      type: string
+      example: ""
+    data:
+      type: array
+      items:
+        $ref: "#/vat_rate_read_object"
