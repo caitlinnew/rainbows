@@ -1,0 +1,71 @@
+schemas:
+  BulkOperationResult:
+    title: BulkOperationResult
+    type: object
+    properties:
+      data:
+        type: object
+        required:
+          - type
+          - id
+        properties:
+          type:
+            $ref: '../internal.yaml#/components/schemas/type'
+          id:
+            $ref: '../internal.yaml#/components/schemas/id'
+          attributes:
+            type: object
+      meta:
+        $ref: '../internal.yaml#/components/schemas/meta'
+    description: Single operation result in the list of results in the bulk operation response
+
+responses:
+  BulkOperationsSuccessResponse:
+    description: Example response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            'atomic:results':
+              type: array
+              items:
+                $ref: '#/schemas/BulkOperationResult'
+
+requestBodies:
+  BulkOperationsAddServiceInvoiceItems:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            'atomic:operations':
+              type: array
+              maxItems: 50
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  op:
+                    type: string
+                    enum:
+                      - add
+                      - update
+                  data:
+                    type: object
+                    properties:
+                      type:
+                        $ref: '../internal.yaml#/components/schemas/type'
+                      id:
+                        $ref: '../internal.yaml#/components/schemas/id'
+                      attributes:
+                        $ref: '../invoicing/components.yaml#/schemas/ServiceInvoiceItem'
+                    required:
+                      - type
+                      - attributes
+                required:
+                  - op
+                  - data
+          required:
+            - 'atomic:operations'
+        examples: {}

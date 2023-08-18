@@ -1,0 +1,362 @@
+parameters:
+  purchasingListId:
+    schema:
+      type: string
+      format: uuid
+    name: purchasingListId
+    in: path
+    required: true
+    description: Purchasing List ID
+responses:
+  PurchasingListResponse:
+    description: Purchasing List resource response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/PurchasingListResource'
+            jsonapi:
+              $ref: '../../internal.yaml#/components/schemas/jsonapi'
+            included:
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/schemas/PurchasingListItemResource'
+                  - $ref: '#/schemas/PurchasableItemResource'
+                  - $ref: '#/schemas/PurchasableAggregateResource'
+                  - $ref: '#/schemas/PurchasableAggregateBrandResource'
+          required:
+            - data
+            - jsonapi
+schemas:
+  PurchasingListResource:
+    title: PurchasingListResource
+    type: object
+    description: Purchasing List resource
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          type:
+            type: string
+            enum: [
+              "saved_for_later",
+              "cart"
+            ]
+            description: "Type of the Purchasing List"
+          name:
+            type:
+              - 'string'
+              - 'null'
+            description: "Custom name of Purchasing List"
+          totalAmount:
+            $ref: '../../internal.yaml#/components/schemas/amount'
+            description: >
+              Total amount (excl. taxes) of the Purchasing List (sum of the amounts of all the items contained in the list, respecting the chosen quantity).
+              Inactive (or non-buyable) items are excluded, same for product aggregates (brands) which doesn't reach the minimum order value threshold.
+          totalItemCount:
+            type: integer
+            description: "Total number of items units contained in the Purchasing List (respecting the chosen quantity)"
+      relationships:
+        type: object
+        properties:
+          items:
+            type: object
+            properties:
+              data:
+                $ref: '../../internal.yaml#/components/schemas/relationshipToMany'
+          itemAggregates:
+            type: object
+            properties:
+              data:
+                $ref: '../../internal.yaml#/components/schemas/relationshipToMany'
+    required:
+      - type
+      - id
+      - attributes
+  PurchasingListItemResource:
+    title: PurchasingListItemResource
+    type: object
+    description: Purchasing List item resource
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          purchasableItemID:
+            type: string
+            format: uuid
+            description: ID of the linked Purchasable Item (product variant)
+          quantity:
+            type: integer
+            description: "Quantity of units of the item (ex: 2 packs of 6 bottles of wine: quantity = 2)"
+          multipliedQuantity:
+            type: integer
+            description: "Total quantity of individual units of the item (ex: 2 packs of 6 bottles of wine: quantity = 12)"
+          amountBeforeDiscount:
+            $ref: '../../internal.yaml#/components/schemas/amount'
+            description: "Amount (excl. taxes) of the item, respecting the chosen quantity, before any discount"
+          amountAfterDiscount:
+            $ref: '../../internal.yaml#/components/schemas/amount'
+            description: "Amount (excl. taxes) of the item, respecting the chosen quantity, discount being eventually applied"
+      relationships:
+        type: object
+        properties:
+          purchasableItem:
+            type: object
+            properties:
+              data:
+                $ref: '../../internal.yaml#/components/schemas/relationshipToOne'
+    required:
+      - type
+      - id
+      - attributes
+  PurchasableItemResource:
+    title: PurchasableItemResource
+    type: object
+    description: Purchasable Item (product variant) resource
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Name of the item
+          imagePath:
+            type: string
+            description: Path to the main image of the item
+          availability:
+            type: string
+            enum: [
+              "available",
+              "variant_disabled",
+              "product_disabled",
+              "brand_disabled",
+              "country_blacklisted",
+              "out_of_stock",
+            ]
+            description: Availability status of Purchasable Item (whenever the item can be bought or not)
+          pricing:
+            $ref: '#/schemas/PurchasableItemPricing'
+            description: Pricing details of the Purchasable Item
+          stock:
+            $ref: '#/schemas/PurchasableItemStock'
+            description: Stock details of the Purchasable Item
+          applicableFees:
+            type: array
+            items:
+              anyOf:
+                - $ref: '#/schemas/PurchasingListItemLongDistanceFee'
+                - $ref: '#/schemas/PurchasingListItemHeavyBulkFee'
+            description: Optional extra fees applied on the Purchasable Item
+    required:
+      - type
+      - id
+      - attributes
+  PurchasableItemOption:
+    title: PurchasableItemOption
+    type: object
+    description: Option details of a given Purchasable Item
+    properties:
+      type:
+        type: string
+        description: "Type of the option assigned to this item (ex: size)"
+      name:
+        type: string
+        description: "Name of the option assigned to this item, translated in user's language (ex: size, taille, ...)"
+      value:
+        type: string
+        description: "Value of the option assigned to this item (ex: 42 FR)"
+  PurchasableItemPricing:
+    title: PurchasableItemPricing
+    type: object
+    description: Pricing details of a given Purchasable Item
+    properties:
+      discount:
+        anyOf:
+          - type: 'null'
+          - $ref: '#/schemas/PurchasableItemDiscount'
+        description: Optional discount applied on the Purchasable Item
+      unitPriceBeforeDiscount:
+        $ref: '../../internal.yaml#/components/schemas/amount'
+        description: "Unit price (excl. taxes) of the Purchasable Item, before any discount"
+      unitPriceAfterDiscount:
+        $ref: '../../internal.yaml#/components/schemas/amount'
+        description: "Unit price (excl. taxes) of the Purchasable Item, after (eventual) discount"
+  PurchasableItemDiscount:
+    title: PurchasableItemDiscount
+    type: object
+    description: Discount applied on a given Purchasable Item
+    properties:
+      type:
+        type: string
+        enum: [
+          "product_discount",
+          "brand_discount",
+          "event_special_discount"
+        ]
+        description: Type of the discount
+      percentage:
+        type: number
+        format: float
+        description: Value (percentage) of the discount
+  PurchasableItemStock:
+    title: PurchasableItemStock
+    type: object
+    description: Stock details of a given Purchasable Item
+    properties:
+      status:
+        type: string
+        enum: [
+          "in_stock",
+          "low_in_stock",
+          "out_of_stock"
+        ]
+        description: General availability (stock) status of the item
+      isAlwaysInStock:
+        type: boolean
+        description: "Flag indicating if the item is always in stock"
+      availableQuantity:
+        type: integer
+        description: "Available quantity of the item in the stock (non-present if the product is always in stock)"
+    required:
+      - status
+      - isAlwaysInStock
+  PurchasingListItemLongDistanceFee:
+    title: PurchasingListItemLongDistanceFee
+    type: object
+    description: Fee applied on a given Purchasable Item if the brand's shipping country is far away from the retailer country
+    properties:
+      type:
+        type: string
+        description: Type of the fee
+        example: long_distance_fees
+      amount:
+        $ref: '../../internal.yaml#/components/schemas/amount'
+        description: Amount of the fee
+      shippingCountryIsoCode: # TODO replace with a property/reference (named: shippingCountry) to the country schema, when it will be available as a global schema
+        type: string
+        description: Country where the fee is applied
+        example: FR
+  PurchasingListItemHeavyBulkFee:
+    title: PurchasingListItemHeavyBulkFee
+    type: object
+    description: Fee applied on a given Purchasable Item if the the product is heavy or bulky
+    properties:
+      type:
+        type: string
+        description: Type of the fee
+        example: long_distance_fees
+      amount:
+        $ref: '../../internal.yaml#/components/schemas/amount'
+        description: Amount of the fee
+  PurchasableAggregateResource:
+    title: PurchasableAggregateResource
+    type: object
+    description: Aggregate (grouped by brand) of Purchasing List items
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          totalAmountBeforeDiscount:
+            $ref: '../../internal.yaml#/components/schemas/amount'
+            description: "Total amount (excl. taxes) of the aggregate (sum of the amounts of all the items contained in it, respecting the chosen quantity), before any discount"
+          totalAmountAfterDiscount:
+            $ref: '../../internal.yaml#/components/schemas/amount'
+            description: "Total amount (excl. taxes) of the aggregate (sum of the amounts of all the items contained in it, respecting the chosen quantity), after discount applied"
+          hasDiscounts:
+            type: boolean
+            description: "Whether the aggregate contains items with discounts"
+          globalDiscountPercentage:
+            type: number
+            format: float
+            description: "Resulting global discount percentage applied on the total amount of the aggregate"
+          itemCount:
+            type: integer
+            description: "Total number of items contained in the aggregate"
+          hasReachedBrandMinimumOrderValue:
+            type: boolean
+            description: "Whether the global total amount of the aggregate has reached the minimum order value (for the brand)"
+          applicableFees:
+            type: array
+            items:
+              anyOf:
+                - $ref: '#/schemas/PurchasingListItemLongDistanceFee'
+                - $ref: '#/schemas/PurchasingListItemHeavyBulkFee'
+            description: Aggregate of the optional extra fees applied on some of the Purchasable Items contained in the list
+          canShipToRetailerCountry:
+            type: boolean
+            description: "Whether the brand can ship to the retailer country"
+      relationships:
+        type: object
+        properties:
+          brand:
+            type: object
+            properties:
+              data:
+                $ref: '../../internal.yaml#/components/schemas/relationshipToOne'
+          items:
+            type: object
+            properties:
+              data:
+                $ref: '../../internal.yaml#/components/schemas/relationshipToMany'
+    required:
+      - type
+      - id
+      - attributes
+  PurchasableAggregateBrandResource:
+    title: PurchasableAggregateBrandResource
+    type: object
+    description: Linked brand of an aggregate
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: "Name of the brand"
+          logoImagePath:
+            type: string
+            description: "Path to the logo image of the brand"
+          minimumOrderValue:
+            $ref: '../../internal.yaml#/components/schemas/amount'
+            description: "Minimum amount (excl. taxes) threshold to reach in order to be able to place an order for this brand"
+          shippingLeadTime:
+            $ref: '#/schemas/PurchasableAggregateBrandShippingLeadTime'
+            description: "Brand's shipping lead time information"
+    required:
+      - type
+      - id
+      - attributes
+  PurchasableAggregateBrandShippingLeadTime:
+    title: PurchasableAggregateBrandShippingLeadTime
+    type: object
+    description: Brand's shipping lead time information
+    properties:
+      min:
+        type: integer
+        description: "Minimum number of days before the order is shipped"
+      max:
+        type: integer
+        description: "Maximum number of days before the order is shipped"

@@ -1,0 +1,23 @@
+post:
+  summary: Bulk Operations
+  operationId: post-api-internal-v1-operations
+  description: Multiple operations on different resources by a single request
+  tags:
+    - Bulk Operations
+  responses:
+    '200':
+      description: OK
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../internal.yaml#/components/responses/UnprocessableEntity'
+  requestBody:
+    $ref: './components.yaml#/requestBodies/BulkOperationsAddServiceInvoiceItems'

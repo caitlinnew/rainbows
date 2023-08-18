@@ -1,0 +1,54 @@
+get:
+  summary: Get Webhook Subscription Events
+  operationId: get-available-webhook-events
+  description: Returns a list of webhook events available in the system
+  tags:
+    - Webhook Subscriptions
+  responses:
+    '200':
+      description: OK
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: array
+                required:
+                  - id
+                  - type
+                properties:
+                  type:
+                    $ref: '../internal.yaml#/components/schemas/type'
+                  id:
+                    $ref: '../internal.yaml#/components/schemas/id'
+          examples:
+            example:
+              value:
+                data:
+                  - type: webhook-subscriptions/events
+                    id: order.brand_created
+                  - type: webhook-subscriptions/events
+                    id: order.brand_accepted
+                  - type: webhook-subscriptions/events
+                    id: order.shipping_labels_generated
+                  - type: webhook-subscriptions/events
+                    id: order.shipped
+                  - type: webhook-subscriptions/events
+                    id: order.shipment_received
+                  - type: webhook-subscriptions/events
+                    id: order.shipment_refused
+                  - type: webhook-subscriptions/events
+                    id: order.brand_paid
+                  - type: webhook-subscriptions/events
+                    id: order.cancelled
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../internal.yaml#/components/responses/ServerError'

@@ -1,0 +1,38 @@
+get:
+  summary: Get Payment Service Provider Customer
+  operationId: invoicing-payment-service-provider-customer
+  description: Returns a single payment service provider customer
+  tags:
+    - Invoicing
+  parameters:
+    - schema:
+        type: integer
+      name: aksCustomerId
+      in: path
+      required: true
+      description: Ankorstore customer ID e.g. brand_id, retailer_id
+    - schema:
+        type: string
+      name: aksCustomerType
+      in: query
+      description: Ankorstore customer e.g. brand, retailer, by default it's brand
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/PaymentServiceProviderCustomerResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

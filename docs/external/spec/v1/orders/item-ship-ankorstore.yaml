@@ -1,0 +1,162 @@
+post:
+  summary: '[Deprecated] Ship Order with Ankorstore'
+  description: '[Deprecated] This endpoint is deprecated. We encourage you to use the List Order Quotes endpoint instead.'
+  deprecated: true
+  operationId: brand-ship-order-ankorstore
+  tags:
+    - Shipping
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/orderIdInPath'
+    - $ref: './components.yaml#/parameters/orderIncludeResourcesInQuery'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            shipping:
+              type: object
+              required:
+                - parcels
+              properties:
+                parcels:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    $ref: './components.yaml#/schemas/ShippingLabelParcel'
+          required:
+            - shipping
+        examples:
+          example:
+            value:
+              shipping:
+                parcels:
+                  - length: 100
+                    width: 10
+                    height: 10
+                    distanceUnit: cm
+                    weight: 2000
+                    massUnit: g
+  responses:
+    '200':
+      description: Order Resource
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/OrderGet'
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: order
+                  id: 1ecb023e-7ec0-6d5c-a477-0242ac170007
+                  attributes:
+                    status: brand_confirmed
+                    reference: 3434273911
+                    brandCurrency: EUR
+                    brandNetAmount: 10229
+                    brandTotalAmount: 10940
+                    brandTotalAmountVat: 602
+                    brandTotalAmountWithVat: 11542
+                    brandRejectReason: null
+                    retailerRejectReason: null
+                    retailerCancellationRequestReason: null
+                    billingName: Charles Attan
+                    billingOrganisationName: Jumbo
+                    billingStreet: Kortricklaan 101
+                    billingPostalCode: 8121 GW
+                    billingCity: Arnhem
+                    billingCountryCode: NL
+                    submittedAt: '2022-03-17T13:19:33+00:00'
+                    shippedAt: null
+                    brandPaidAt: null
+                    createdAt: '2022-02-01T14:37:10+00:00'
+                    updatedAt: '2022-03-31T15:10:07+00:00'
+                    shippingMethod: ankorstore
+                    shippingOverview:
+                      availableShippingMethods:
+                        - custom
+                        - ankorstore
+                      shipToAddress:
+                        name: John Smith
+                        organisationName: Test
+                        street: Test Street
+                        city: Commentry
+                        postalCode: '03633'
+                        countryCode: FR
+                      expectedShippingDates:
+                        minimum: '2022-03-22T00:00:00+00:00'
+                        maximum: '2022-03-24T23:59:59+00:00'
+                      provider: null
+                      tracking: null
+                      latestQuote:
+                        id: 5cc76f26-0f5d-1ecb-a0d6-0242ac170009
+                        provider: ups
+                        rateAmount:
+                          amount: 1359
+                          currency: EUR
+                        rateProvider: ankorstore
+                        shippingCostsOverview:
+                          amount: 1037
+                          currency: EUR
+                          type: fee
+                      parcels:
+                        - length: 30
+                          width: 60
+                          height: 40
+                          weight: 16500
+                          distanceUnit: cm
+                          massUnit: g
+                          trackedPackage: null
+                        - length: 30
+                          width: 60
+                          height: 40
+                          weight: 20000
+                          distanceUnit: cm
+                          massUnit: g
+                          trackedPackage: null
+                      transaction: null
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../v1.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      description: 'Unprocessable Entity : Data provided are invalid'
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../../v1.yaml#/components/schemas/failure'
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: string
+                errors:
+                  - detail: The field is required.
+                    source:
+                      pointer: field
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail: The shipping.parcels.0.weight may not be greater than 30000.
+                    source:
+                      pointer: shipping.parcels.0.weight
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail: The package dimensions are too big. Length (longest measurement) can be up to 274 cm
+                    source:
+                      pointer: shipping.parcels.1
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail: The package dimensions are too big. Packages can be up to 400 cm in length and girth combined
+                    source:
+                      pointer: shipping.parcels.2
+                    status: '422'
+                    title: Unprocessable Content

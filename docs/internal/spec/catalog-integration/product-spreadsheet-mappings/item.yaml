@@ -1,0 +1,27 @@
+get:
+  summary: Get Product spreadsheet mapping
+  operationId: get-catalog-integration-product-spreadsheet-mapping
+  description: Get Product spreadsheet mapping
+  tags:
+    - Catalog Integration
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - schema:
+        type: string
+        format: uuid
+      name: productSpreadsheetMappingId
+      in: path
+      required: true
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/ProductSpreadsheetMappingResponseContent'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

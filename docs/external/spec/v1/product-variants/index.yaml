@@ -1,0 +1,85 @@
+get:
+  summary: List Product Variants with their stock
+  description: Returns all product variants with their stock
+  operationId: list-product-variants-with-stock
+  tags:
+    - Product
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/ProductVariantCollection'
+          examples:
+            example:
+              value:
+                meta:
+                  page:
+                    from: 3571bdc1-fa01-44fa-9342-d99bd1c2befa
+                    hasMore: true
+                    perPage: 2
+                    to: 4271bdc1-fa01-44fa-9342-d99bd1c2befa
+                jsonapi:
+                  version: '1.0'
+                links:
+                  first: 'https://www.ankorstore.com/api/v1/product-variants?include=&page%5Blimit%5D=2'
+                  next: 'https://www.ankorstore.com/api/v1/product-variants?include=&page%5Bafter%5D=4271bdc1-fa01-44fa-9342-d99bd1c2befa&page%5Blimit%5D=2'
+                  prev: 'https://www.ankorstore.com/api/v1/product-variants?include=&page%5Bbefore%5D=3571bdc1-fa01-44fa-9342-d99bd1c2befa&page%5Blimit%5D=2'
+                data:
+                  - type: productVariant
+                    id: 3571bdc1-fa01-44fa-9342-d99bd1c2befa
+                    attributes:
+                      name: Test Product Variant
+                      sku: Product-Variant-001
+                      ian: '1924859325863'
+                      createdAt: '2020-08-27T14:29:15.000000Z'
+                      updatedAt: '2021-10-04T12:03:31.000000Z'
+                      archivedAt: null
+                      retailPrice: 800
+                      wholesalePrice: 500
+                      originalWholesalePrice: 500
+                      availableQuantity: 125
+                      reservedQuantity: 25
+                      stockQuantity: 150
+                      isAlwaysInStock: false
+                    relationships:
+                      product:
+                        data:
+                          type: product
+                          id: 4271bdc1-fa11-54fa-9242-d99bd1c2befb
+                  - type: productVariant
+                    id: 4271bdc1-fa01-44fa-9342-d99bd1c2befa
+                    attributes:
+                      name: Another test Product Variant
+                      sku: Product-Variant-002
+                      ian: '1924859325867'
+                      createdAt: '2020-08-27T14:29:15.000000Z'
+                      updatedAt: '2021-10-04T12:03:31.000000Z'
+                      archivedAt: null
+                      retailPrice: 800
+                      wholesalePrice: 500
+                      originalWholesalePrice: 500
+                      availableQuantity: 125
+                      reservedQuantity: 25
+                      stockQuantity: 150
+                      isAlwaysInStock: false
+                    relationships:
+                      product:
+                        data:
+                          type: product
+                          id: 2291bdc1-bc01-44fa-9342-d95bd1c2befa
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../v1.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'

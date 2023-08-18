@@ -1,0 +1,130 @@
+post:
+  summary: List Shipping Quotes
+  operationId: list-order-shipping-quotes
+  description: 'List multiple carrier service quotes that you can choose to ship your order. Please visit our [FAQs](https://knowledgecommunity.force.com/faq/s/article/how-do-i-benefit-from-shipping-with-ankorstore?language=en_US) for more information.'
+  tags:
+    - Shipping
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: '../../v1/orders/components.yaml#/parameters/orderIdInPath'
+    - $ref: '../../v1/orders/components.yaml#/parameters/orderIncludeResourcesInQuery'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          properties:
+            parcels:
+              type: array
+              minimum: 1
+              maximum: 20
+              items:
+                type: object
+                required:
+                  - kg
+                  - height
+                  - length
+                  - width
+                properties:
+                  kg:
+                    type: number
+                    description: The weight of the parcel in kilograms
+                    min: 0.001
+                    maximum: 30.000
+                  height:
+                    type: number
+                    description: The height of the parcel in centimeters
+                    min: 1
+                    maximum: 274
+                  length:
+                    type: number
+                    description: The length of the parcel in centimeters
+                    min: 1
+                    maximum: 274
+                  width:
+                    type: number
+                    description: The width of the parcel in centimeters
+                    min: 1
+                    maximum: 274
+            no_dangerous_product:
+              type: boolean
+              description: Indicates if the parcel contains dangerous products
+          required:
+            - parcels
+        example:
+          parcels:
+            - length: 20
+              width: 20
+              height: 20
+              kg: 21.0
+          no_dangerous_product: true
+
+  responses:
+    '200':
+      description: A list of shipping quotes
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/ListShippingQuotesResponse'
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: "1.0"
+                data:
+                  - quoteUuid: "1eda3cbb-983b-6a4a-b395-6a0440190584"
+                    carrierCode: "ups"
+                    serviceCode: "11"
+                    serviceCommercialName: "UPS STANDARD"
+                    collectionMethod:
+                      - "pickup"
+                    shippingCost:
+                      amount: 12.00
+                      currency: "EUR"
+    '404':
+      $ref: '../../v1.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      description: 'Unprocessable Entity : Data provided are invalid'
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../../v1.yaml#/components/schemas/failure'
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: string
+                errors:
+                  - detail: The field is required.
+                    source:
+                      pointer: field
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail:  "The package dimensions are too big. Packages can be up to 400 cm in length and girth combined"
+                    source:
+                      pointer: shipping.parcels.0
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail: "The parcel weight (kg) must be between 0.001 and 30.000."
+                    source:
+                      pointer: shipping.parcels.0.kg
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail: "The parcel length may not be greater than 274."
+                    source:
+                      pointer: shipping.parcels.0.length
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail: "The parcel width may not be greater than 274."
+                    source:
+                      pointer: shipping.parcels.0.width
+                    status: '422'
+                    title: Unprocessable Content
+                  - detail: "The parcel height may not be greater than 274."
+                    source:
+                      pointer: shipping.parcels.0.height
+                    status: '422'
+                    title: Unprocessable Content

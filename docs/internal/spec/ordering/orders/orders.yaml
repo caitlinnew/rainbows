@@ -1,0 +1,127 @@
+get:
+  operationId: ordering-list-orders
+  description: Returns a list of master orders (internal and external orders included)
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/MasterOrdersCollectionResponse'
+    '400':
+      $ref: '../../internal.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - in: query
+      name: fields[orders]
+      description: Choose only specific attributes from order payload
+      schema:
+        type: string
+    - in: query
+      name: fields[order-shipping]
+      description: Choose only specific attributes from order payload
+      schema:
+        type: string
+    - in: query
+      name: include
+      description: Include related resources in the response
+      schema:
+        type: string
+        enum:
+          - orderItems
+          - orderShipping
+    - in: query
+      name: page[limit]
+      schema:
+        type: integer
+    - in: query
+      name: page[offset]
+      schema:
+        type: integer
+    - name: 'filter[priority_key]'
+      in: query
+      description: Request masters orders for a specific priority category
+      allowEmptyValue: false
+      required: false
+      schema:
+        type: string
+        enum:
+          - on_time
+          - overdue
+          - close_deadline
+    - name: 'filter[status_key]'
+      in: query
+      description: Request master orders for a specific status category
+      allowEmptyValue: false
+      required: false
+      schema:
+        type: string
+        enum:
+          - created
+          - prepared
+          - shipped
+          - delivered
+          - completed
+          - cancelled
+          - pending_validation
+          - reception_refused
+    - name: 'filter[search_term]'
+      in: query
+      description: Request master orders based on free text search e.g. product, brand, retailer etc.
+      allowEmptyValue: false
+      required: false
+      schema:
+        type: string
+    - name: 'filter[brand_cancellation_key]'
+      in: query
+      description: Request master orders for a specific brand cancellation reason
+      allowEmptyValue: false
+      required: false
+      schema:
+        type: string
+        enum:
+          - PRODUCT_OUT_OF_STOCK
+          - BRAND_HAS_EXCLUSIVE_DISTRIBUTOR_IN_THE_REGION
+          - BRAND_CANNOT_DELIVER_TO_THE_AREA
+          - RETAILER_AGREED_TO_DO_CHANGES_TO_ORDER
+          - BRAND_SHIPPING_FEES_VIA_CUSTOM
+          - OTHER
+          - REJECTED_VIA_EXTERNAL_INTEGRATION
+          - BRAND_SHIPPING_FEES_VIA_ANKORSTORE
+          - PAYMENT_ISSUES_WITH_RETAILER
+          - PREPARATION_TIME_TOO_HIGH
+          - BUYER_NOT_A_RETAILER
+          - PURCHASE_NOT_FOR_RESALE
+          - RETAILER_NOT_GOOD_FIT_FOR_BRAND
+          - RETAILER_VAT_NUMBER_MISSING
+          - ORDER_ITEMS_PRICES_INCORRECT
+          - BRAND_ALREADY_HAS_CUSTOMER_IN_THE_AREA
+    - name: 'filter[order_type]'
+      in: query
+      description: Request master orders of a specific type
+      allowEmptyValue: false
+      required: false
+      schema:
+        type: string
+        enum:
+          - internal
+          - external
+    - name: sort
+      in: query
+      description: Specify attribute(s) to sort by
+      allowEmptyValue: false
+      required: false
+      schema:
+        type: string
+        default: '-created_at'
+        enum:
+          - created_at
+          - '-created_at'
+          - status
+          - '-status'

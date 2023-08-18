@@ -1,0 +1,75 @@
+get:
+  summary: Get Product
+  description: Retrieve a specific product
+  operationId: get-product
+  tags:
+    - Product
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/productIdInPath'
+    - $ref: './components.yaml#/parameters/productIncludeResourcesInQuery'
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/ProductGet'
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: product
+                  id: 0c5e6540-0da9-1ecb-bf59-0242ac170007
+                  attributes:
+                    name: Example Product
+                    description: Example description of product
+                    language: fr
+                    dimensions: '5,5x5,5x6'
+                    netWeight: 100G
+                    capacity: 100g
+                    position: 34
+                    unitMultiplier: 12
+                    vatRate: 5.5
+                    discountRate: 0
+                    active: true
+                    outOfStock: false
+                    archived: false
+                    retailPrice: 750
+                    wholesalePrice: 426
+                    originalWholesalePrice: 426
+                    createdAt: '2020-08-27T14:26:38.000000Z'
+                    indexedAt: '2022-02-10T03:26:11.000000Z'
+                    updatedAt: '2022-02-09T14:49:09.000000Z'
+                included:
+                  - type: productVariant
+                    id: 2171bdc1-fa01-44fa-9342-d99bd1c2befa
+                    attributes:
+                      name: Test Product Variant
+                      sku: Product-Variant-001
+                      ian: '1924859325863'
+                      createdAt: '2020-08-27T14:29:15.000000Z'
+                      updatedAt: '2021-10-04T12:03:31.000000Z'
+                      archivedAt: null
+                      retailPrice: 800
+                      wholesalePrice: 500
+                      originalWholesalePrice: 500
+                      availableQuantity: 125
+                      reservedQuantity: 25
+                      stockQuantity: 150
+                      isAlwaysInStock: false
+                    relationships:
+                      product:
+                        data:
+                          type: product
+                          id: c8466a3c-4fb8-4474-a86f-20f10d14314f
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '404':
+      $ref: '../../v1.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'

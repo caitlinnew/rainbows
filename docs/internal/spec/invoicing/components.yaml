@@ -1,0 +1,258 @@
+schemas:
+  ServiceInvoiceResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/ServiceInvoice'
+    required:
+      - type
+      - id
+      - attributes
+  InvoiceStatus:
+    type: string
+    enum:
+      - 'pro_forma'
+      - 'paid'
+      - 'payment failed'
+      - 'payment pending'
+      - 'payment_processing'
+  ServiceInvoice:
+    type: object
+    properties:
+      invoiceNumber:
+        description: The invoice number
+        pattern: '^AKS-\d{6}-\d{9}$'
+        type:
+          - string
+          - 'null'
+      totalAmount:
+        description: 'Total amount for the item, excluding VAT (in EUR & in minor units)'
+        type: integer
+      totalVat:
+        description: 'Total amount of VAT for the item (in EUR & in minor units)'
+        type: integer
+      totalAmountWithVat:
+        description: 'Total amount for the item, including VAT (in EUR & in minor units)'
+        type: integer
+      invoicedAt:
+        description: 'The date that invoiced this service invoice'
+        type: string
+        format: datetime
+      status:
+        $ref: '#/schemas/InvoiceStatus'
+      invoicePeriod:
+        description: 'The period for which the invoice is issued'
+        type: string
+        pattern: '^(\d{2}-)?(\d{2}-)?\d{4}$'
+      content:
+        description: PDF contents, base64 encoded
+        type: string
+        format: byte
+  ServiceInvoiceItemResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/ServiceInvoiceItem'
+    required:
+      - type
+      - id
+      - attributes
+  ServiceInvoiceItem:
+    type: object
+    properties:
+      brandId:
+        type: integer
+      description:
+        description: 'Invoiced item details. May contain linebreaks and/or markdown for formatting'
+        type: string
+      category:
+        description: 'Category used for item grouping and sub-totals. May contain linebreaks and/or markdown for formatting'
+        type: string
+      quantity:
+        description: 'Number of units invoiced per item'
+        type: number
+        format: float
+      vatRate:
+        description: 'Percentage of VAT to be applied'
+        type: number
+        format: float
+      unitAmount:
+        description: 'Amount for one billable unit (in EUR & minor units)'
+        type: integer
+      totalAmount:
+        description: 'Total amount for the item, excluding VAT (in EUR & in minor units)'
+        type: integer
+      totalVat:
+        description: 'Total amount of VAT for the item (in EUR & in minor units)'
+        type: integer
+      totalAmountWithVat:
+        description: 'Total amount for the item, including VAT (in EUR & in minor units)'
+        type: integer
+      incurredAt:
+        description: 'The date that the service charge applies to'
+        type: string
+        format: datetime
+      metadata:
+        description: |
+          Metadata associated with the item. Keys in use:
+          - merge_key: string to merge multiple items into a single line shown in the invoice
+          - parity_factor: string to define a service items' scope if this is not already
+                            uniquely defined by the description + category
+          - summary_title: string for a summary entry, for which this should be shown as a sub-item
+          - summary_key: string on which to group items for the summary entry
+          - summary_order: an explicit order (int) at which to show the summary entry, from low to high
+          - item_category: category of the item in order to identify and apply specific processes by catagory (discount per category for instance)
+        type: array
+        items:
+          type: string
+    required:
+      - description
+      - quantity
+      - unitAmount
+      - vatRate
+  PaymentServiceProviderCustomerResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/PaymentServiceProviderCustomer'
+    required:
+      - type
+      - id
+      - attributes
+  SetupIntentResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/SetupIntent'
+    required:
+      - type
+      - id
+      - attributes
+  SetupIntent:
+    type: object
+    properties:
+      clientSecret:
+        description: 'Setup Intent client secret'
+        type: string
+      ibanLast4:
+        description: 'Last 4 characters of Setup Intent Sepa Debit iban'
+        type: string
+  PaymentServiceProviderCustomer:
+    type: object
+    properties:
+      aksCustomerId:
+        description: 'Ankstore customer ID e.g. brand_id, retailer_id etc.'
+        type: integer
+      aksCustomerType:
+        description: 'Ankstore customer type e.g. Brand, Retailer etc.'
+        type: string
+        enum:
+          - brand
+          - retailer
+      customerId:
+        description: 'Customer ID from payment service provider'
+        type: string
+      setupIntentId:
+        description: 'Intent Setup ID for future payments from payment service provider'
+        type: string
+      paymentServiceProvider:
+        type: string
+      email:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      mandateType:
+        type: string
+        enum:
+          - multi_use
+          - single_use
+      mandateStatus:
+        type: string
+        readOnly: true
+        enum:
+          - active
+          - inactive
+          - pending
+          - processing
+    required:
+      - aksCustomerId
+      - aksCustomerType
+      - customerId
+      - paymentServiceProvider
+      - mandateType
+
+responses:
+  ServiceInvoiceItemsCollectionResponse:
+    description: Set of invoice items
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/schemas/ServiceInvoiceItemResource'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+  SetupIntentResponse:
+    description: Get a setupIntent
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/SetupIntentResource'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+  ServiceInvoiceCollectionResponse:
+    description: Set of service invoices
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/schemas/ServiceInvoiceResource'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+  PaymentServiceProviderCustomerResponse:
+    description: Single Payment Service Provider Customer
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/PaymentServiceProviderCustomerResource'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi

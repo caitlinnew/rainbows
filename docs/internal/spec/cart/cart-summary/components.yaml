@@ -1,0 +1,152 @@
+parameters:
+  cartSummaryId:
+    schema:
+      type: string
+      format: uuid
+    name: cartSummaryId
+    in: path
+    required: true
+    description: Cart Summary ID
+
+responses:
+  CartSummaryResponse:
+    description: Cart Summary resource response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/CartSummaryResource'
+            included:
+              type: array
+              items:
+                anyOf:
+                  - $ref: '../purchasing-lists/components.yaml#/schemas/PurchasingListResource'
+                  - $ref: '../purchasing-lists/components.yaml#/schemas/PurchasableAggregateBrandResource'
+                  - $ref: '../components.yaml#/schemas/PromocodeResource'
+                  - $ref: '../components.yaml#/schemas/AddressResource'
+                  - $ref: '../components.yaml#/schemas/CountryResource'
+
+            jsonapi:
+              $ref: '../../internal.yaml#/components/schemas/jsonapi'
+            meta:
+              $ref: '#/schemas/CartSummaryMeta'
+          required:
+            - data
+            - jsonapi
+            - meta
+
+schemas:
+  CartSummaryResource:
+    title: CartSummaryResource
+    type: object
+    description: Cart Summary resource
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        required:
+          - summary
+          - fees
+          - taxes
+        properties:
+          summary:
+            type: object
+            properties:
+              feesAndTaxesTotal:
+                $ref: '../../internal.yaml#/components/schemas/amount'
+                description: sum of product taxes (vat) + sum of individual fees (and their respective vat) + sum of global taxes (recargo, ...)
+              discountsTotal:
+                $ref: '../../internal.yaml#/components/schemas/amount'
+                description: sum of discounts (promocode, offers, ...)
+              grandTotal:
+                $ref: '../../internal.yaml#/components/schemas/amount'
+                description: everything considered, taxes included
+          fees:
+            type: array
+            items:
+              anyOf:
+                - $ref: 'fees.yaml#/schemas/ShippingFeeResource'
+                - $ref: 'fees.yaml#/schemas/HeavyBulkFeeResource'
+                - $ref: 'fees.yaml#/schemas/LongDistanceFeeResource'
+          taxes:
+            type: array
+            items:
+              $ref: '#/schemas/TaxResource'
+          discounts:
+            type: array
+            items:
+              $ref: '#/schemas/DiscountResource'
+        relationships:
+          type: object
+          properties:
+            list:
+              type: object
+              properties:
+                data:
+                  $ref: '../../internal.yaml#/components/schemas/relationshipToOne'
+            promocodes:
+              type: object
+              properties:
+                data:
+                  $ref: '../../internal.yaml#/components/schemas/relationshipToMany'
+            billingAddress:
+              $ref: '../../internal.yaml#/components/schemas/relationshipToOne'
+            shippingAddress:
+              $ref: '../../internal.yaml#/components/schemas/relationshipToOne'
+    required:
+      - type
+      - id
+      - attributes
+
+  CartSummaryMeta:
+    type: object
+    additionalProperties: true
+    properties:
+      isFirstPurchase:
+        type: boolean
+    required:
+      - isFirstPurchase
+
+  TaxResource:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - fees_vat
+          - goods_vat
+          - recargo_de_equivaliencia
+      amount:
+        type: '../../internal.yaml#/components/schemas/amount'
+    required:
+      - type
+      - amount
+
+  DiscountResource:
+    type: object
+    properties:
+      type:
+        type: string
+        enum:
+          - promocode
+          - offer_discount
+          - event_discount
+          - payment_method_discount
+          - wallet
+      amount:
+        type: '../../internal.yaml#/components/schemas/amount'
+      metadata:
+        type: object
+        properties:
+          label:
+            type: string
+        required:
+          - label
+    required:
+      - type
+      - amount

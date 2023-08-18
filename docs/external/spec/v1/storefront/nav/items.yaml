@@ -1,0 +1,16 @@
+get:
+  parameters:
+    - name: code
+      in: path
+      schema:
+        type: string
+      required: true
+      example: main
+      description: The unique code (slug) for the menu
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/NavigationMenuItems'
+    '406':
+      $ref: '../../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../../v1.yaml#/components/responses/UnsupportedMediaType'

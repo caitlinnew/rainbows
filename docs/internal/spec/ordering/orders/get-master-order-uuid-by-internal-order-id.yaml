@@ -1,0 +1,29 @@
+get:
+  summary: Returns master order uuid by internal order id for the currently authenticated brand
+  operationId: get-master-order-uuid-by-internal-order-id
+  description: Returns master order uuid by internal order id for the currently authenticated brand
+  tags:
+    - Ordering
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/MasterOrderUuidResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  parameters:
+    - in: header
+      name: Accept
+      description: application/vnd.api+json
+      schema:
+        type: string
+    - in: route
+      name: orderId
+      schema:
+        type: integer

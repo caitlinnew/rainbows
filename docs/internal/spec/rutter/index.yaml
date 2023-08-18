@@ -1,0 +1,59 @@
+get:
+  summary: List Rutter Integrations
+  operationId: list-rutter-integrations
+  description: Returns a list of available Rutter Integrations for the currently authenticated brand
+  tags:
+    - Rutter
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/RutterIntegrationsCollectionResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+post:
+  summary: Create Rutter integration
+  operationId: create-rutter-integration
+  description: Creates a new Rutter integration for the currently authenticated brand
+  tags:
+    - Rutter
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/RutterIntegrationResponse'
+    '201':
+      $ref: './components.yaml#/responses/RutterIntegrationResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '409':
+      $ref: '../internal.yaml#/components/responses/Conflict'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../internal.yaml#/components/responses/UnprocessableEntity'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            publicToken:
+              type: string
+              example: 937c5af4-d0a4-46b5-820d-300e75d982a5
+              description: 'Public token received from Rutter callback (https://docs.rutterapi.com/docs/javascript-quickstart#open-the-rutter-popup)'
+              writeOnly: true
+            orderTags:
+              $ref: './components.yaml#/schemas/RutterOrderTags'
+          required:
+            - publicToken

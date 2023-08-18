@@ -1,0 +1,940 @@
+schemas:
+  OrderCollection:
+    title: Order Collection
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        description: List of Order resource objects
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/schemas/Order'
+      included:
+        description: 'To reduce the number of HTTP requests, servers **MAY** allow responses that include related resources along with the requested primary resources. Such responses are called `compound documents`.'
+        type: array
+        items:
+          anyOf:
+            - $ref: '../retailer/components.yaml#/schemas/Retailer'
+            - $ref: '#/schemas/OrderItem'
+            - $ref: '#/schemas/BillingItem'
+            - $ref: '../product-variants/components.yaml#/schemas/ProductOption'
+            - $ref: '../product-variants/components.yaml#/schemas/ProductVariant'
+            - $ref: '../products/components.yaml#/schemas/Product'
+        uniqueItems: true
+      meta:
+        $ref: '../../v1.yaml#/components/schemas/paginationMeta'
+      links:
+        $ref: '../../v1.yaml#/components/schemas/paginationLinks'
+      jsonapi:
+        $ref: '../../v1.yaml#/components/schemas/jsonapi'
+    additionalProperties: false
+  OrderGet:
+    title: Order Get
+    type: object
+    additionalProperties: false
+    examples:
+      - jsonapi:
+          version: '1.0'
+        data:
+          type: order
+          id: 1ecb023e-7ec0-6d5c-a477-0242ac170007
+          attributes:
+            status: shipped
+            reference: 3434273911
+            brandCurrency: EUR
+            brandTotalAmount: 12588
+            brandTotalAmountVat: 693
+            brandTotalAmountWithVat: 13281
+            shippingMethod: ankorstore
+            shippingOverview:
+              availableShippingMethods:
+                - custom
+                - ankorstore
+              shipToAddress:
+                name: John Smith
+                organisationName: Test Retailer
+                street: Test Street
+                city: Roma
+                postalCode: '00222'
+                countryCode: IT
+              expectedShippingDates:
+                minimum: '2022-03-28T00:00:00+00:00'
+                maximum: '2022-03-30T23:59:59+00:00'
+              provider: ups
+              tracking: null
+              latestQuote:
+                id: 5cc76f26-0f5d-1ecb-a0d6-0242ac170009
+                provider: ups
+              parcels:
+                - length: 50
+                  width: 100
+                  height: 50
+                  weight: 10000
+                  distanceUnit: cm
+                  massUnit: g
+                  trackedPackage:
+                    labelUrl: 'https://www.ankorstore.com/api/v1/orders/1ecb023e-7ec0-6d5c-a477-0242ac170007/shipping-labels/335654/pdf'
+                    eta: null
+                    trackingNumber: 1Z8A76E49136380279
+                    trackingLink: 'https://www.ups.com/track?tracknum=1Z8A76E49136380279&requester=WT/trackdetails'
+                    currentStatus:
+                      status: UNKNOWN
+                      statusDetails: null
+                      updatedAt: '2022-03-28T15:35:19+00:00'
+                      location:
+                        city: null
+                        state: null
+                        zip: null
+                        country: null
+                - length: 75
+                  width: 50
+                  height: 50
+                  weight: 5200
+                  distanceUnit: cm
+                  massUnit: g
+                  trackedPackage:
+                    labelUrl: 'https://www.ankorstore.com/api/v1/orders/1ecb023e-7ec0-6d5c-a477-0242ac170007/shipping-labels/335655/pdf'
+                    eta: null
+                    trackingNumber: 1Z8A76E49137225882
+                    trackingLink: 'https://www.ups.com/track?tracknum=1Z8A76E49137225882&requester=WT/trackdetails'
+                    currentStatus:
+                      status: UNKNOWN
+                      statusDetails: null
+                      updatedAt: '2022-03-28T15:35:19+00:00'
+                      location:
+                        city: null
+                        state: null
+                        zip: null
+                        country: null
+              transaction:
+                pickup:
+                  pickupDate: '2022-03-30T00:00:00+00:00'
+                  closeTime: '15:00:00'
+                  readyTime: '09:00:00'
+                  externalReferenceId: 2929602E9CP
+                tracking:
+                  eta: null
+                  trackingNumber: 1Z8A76E49136380279
+                  trackingLink: 'https://www.ups.com/track?tracknum=1Z8A76E49136380279&requester=WT/trackdetails'
+                  currentStatus:
+                    status: UNKNOWN
+                    statusDetails: null
+                    updatedAt: '2022-03-28T15:35:19+00:00'
+                    location:
+                      city: null
+                      state: null
+                      zip: null
+                      country: null
+            brandRejectReason: null
+            retailerRejectReason: null
+            retailerCancellationRequestReason: null
+            billingName: Charles Attan
+            billingOrganisationName: Jumbo
+            billingStreet: Kortricklaan 101
+            billingPostalCode: 8121 GW
+            billingCity: Arnhem
+            billingCountryCode: NL
+            submittedAt: '2022-02-02T20:15:05.000000Z'
+            shippedAt: '2022-02-09T15:05:27.000000Z'
+            brandPaidAt: null
+            createdAt: '2022-02-02T19:42:31.000000Z'
+            updatedAt: '2022-03-11T08:57:56.000000Z'
+          relationships:
+            retailer:
+              data:
+                type: retailer
+                id: 092b63ce-c5b9-1eca-b05f-0242ac170007
+        included:
+          - type: retailer
+            id: 092b63ce-c5b9-1eca-b05f-0242ac170007
+            attributes:
+              companyName: null
+              storeName: TEST RETAILER
+              storeUrl: null
+              email: test-retailer@gmail.com
+              firstName: Marie-France
+              lastName: DESCHAMPS
+              taxNumber: '819470824'
+              vatNumber: FR58819470824
+              eoriNumber: null
+              phoneNumberE164: '+33688615593'
+              businessIdentifier: '819470824'
+              createdAt: '2020-06-19T11:59:30.000000Z'
+              updatedAt: '2020-06-21T15:27:39.000000Z'
+    properties:
+      data:
+        $ref: '#/schemas/Order'
+      included:
+        description: 'To reduce the number of HTTP requests, servers **MAY** allow responses that include related resources along with the requested primary resources. Such responses are called `compound documents`.'
+        type: array
+        uniqueItems: true
+        items:
+          anyOf:
+            - $ref: '../retailer/components.yaml#/schemas/Retailer'
+            - $ref: '#/schemas/OrderItem'
+            - $ref: '#/schemas/BillingItem'
+            - $ref: '../product-variants/components.yaml#/schemas/ProductOption'
+            - $ref: '../product-variants/components.yaml#/schemas/ProductVariant'
+            - $ref: '../products/components.yaml#/schemas/Product'
+      jsonapi:
+        $ref: '../../v1.yaml#/components/schemas/jsonapi'
+    required:
+      - data
+  OrderWorkflowStatus:
+    type: string
+    example: ankor_confirmed
+    enum:
+      - ankor_confirmed
+      - rejected
+      - brand_confirmed
+      - shipping_labels_generated
+      - fulfillment_requested
+      - shipped
+      - reception_refused
+      - received
+      - invoiced
+      - brand_paid
+      - cancelled
+  Order:
+    description: The resource object for Order
+    type: object
+    additionalProperties: false
+    title: Order Resource
+    properties:
+      type:
+        $ref: '../../v1.yaml#/components/schemas/type'
+      id:
+        $ref: '../../v1.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        additionalProperties: false
+        properties:
+          status:
+            $ref: '#/schemas/OrderWorkflowStatus'
+          reference:
+            type: integer
+            description: 'The order reference used on shipping labels, communication etc'
+          brandCurrency:
+            type: string
+            description: The currency the brand is paid in
+          brandNetAmount:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The amount the brand is paid (total - fees - shipping cost + shipping refund). You may find the Ankorstore fees and the other amounts by including the orders billing items.
+          brandTotalAmount:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The total of all order items not including VAT
+          brandTotalAmountVat:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The total VAT of all order items
+          brandTotalAmountWithVat:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The total of all order items including VAT
+          shippingMethod:
+            type:
+              - 'null'
+              - string
+            description: The chosen shipping method after going through the shipping process
+            enum:
+              - ankorstore
+              - custom
+              - null
+          shippingOverview:
+            $ref: '#/schemas/OrderShippingOverview'
+          brandRejectReason:
+            type:
+              - 'null'
+              - string
+            description: The reason the brand has given for rejecting the order
+          retailerRejectReason:
+            type:
+              - 'null'
+              - string
+            description: The reason the retailer rejected the reception of the order
+          retailerCancellationRequestReason:
+            type:
+              - 'null'
+              - string
+            description: The reason the retailer has given for a cancellation request
+          billingName:
+            type:
+              - 'null'
+              - string
+            description: The billing address name
+          billingOrganisationName:
+            type:
+              - 'null'
+              - string
+            description: The billing address organisation name
+          billingStreet:
+            type:
+              - 'null'
+              - string
+            description: The billing address street name
+          billingPostalCode:
+            type:
+              - 'null'
+              - string
+            description: The billing address postal code
+          billingCity:
+            type:
+              - 'null'
+              - string
+            description: The billing address city
+          billingCountryCode:
+            type:
+              - 'null'
+              - string
+            description: The billing address country code - ISO format
+          submittedAt:
+            type: string
+            format: datetime
+            description: The timestamp of when the order was submitted (order is placed)
+          shippedAt:
+            type:
+              - 'null'
+              - string
+            format: datetime
+            description: The timestamp of when the order was shipped
+          brandPaidAt:
+            type:
+              - 'null'
+              - string
+            format: datetime
+            description: The timestamp of when the brand was paid
+          createdAt:
+            type: string
+            format: datetime
+            description: (deprecated) The timestamp of when the order was created (before retailer payment)
+          updatedAt:
+            type: string
+            format: datetime
+            description: The timestamp of when the order was updated (does not include other resources)
+      relationships:
+        type: object
+        properties:
+          retailer:
+            description: 'Related Retailer Resource'
+            type: object
+            properties:
+              data:
+                allOf:
+                  - $ref: '../../v1.yaml#/components/schemas/linkage'
+                  - type: object
+                    properties:
+                      type:
+                        const: retailers
+          billingItems:
+            description: 'Related Billing Item Resources'
+            type: object
+            properties:
+              data:
+                type: array
+                uniqueItems: true
+                items:
+                  allOf:
+                    - $ref: '../../v1.yaml#/components/schemas/linkage'
+                    - type: object
+                      properties:
+                        type:
+                          const: billing-items
+          orderItems:
+            description: 'Related Order Item Resources'
+            type: object
+            properties:
+              data:
+                type: array
+                uniqueItems: true
+                items:
+                  allOf:
+                    - $ref: '../../v1.yaml#/components/schemas/linkage'
+                    - type: object
+                      properties:
+                        type:
+                          const: order-items
+          orderItems-productOption:
+            description: 'Schema: Order Item -> Product Option Resource'
+            type: object
+            properties:
+              data:
+                $ref: '../../v1.yaml#/components/schemas/relationshipToOne'
+          orderItems-productOption-product:
+            description: 'Schema: Order Item -> Product Option Resource -> Product'
+            type: object
+            properties:
+              data:
+                $ref: '../../v1.yaml#/components/schemas/relationshipToOne'
+          orderItems-productVariant:
+            description: 'Schema: Order Item -> Product Variant Resource'
+            type: object
+            properties:
+              data:
+                $ref: '../../v1.yaml#/components/schemas/relationshipToOne'
+          orderItems-productVariant-product:
+            description: 'Schema: Order Item -> Product Variant Resource -> Product'
+            type: object
+            properties:
+              data:
+                $ref: '../../v1.yaml#/components/schemas/relationshipToOne'
+    required:
+      - type
+      - id
+  OrderShippingOverview:
+    title: Order Resource -> Shipping Overview
+    description: Contains all information related to either shipping method (`ankorstore` or `custom`). This field is ONLY included when fetching a single order at a time.
+    type: object
+    properties:
+      availableShippingMethods:
+        type: array
+        description: Available shipping methods to use. Custom is ship with your own carrier outside of Ankorstore.
+        items:
+          enum:
+            - ankorstore
+            - custom
+      shipToAddress:
+        type: object
+        description: The address the order needs to be shipped to
+        required:
+          - street
+          - city
+          - postalCode
+        properties:
+          name:
+            type:
+              - 'null'
+              - string
+            description: The first and last name of the recipient
+          organisationName:
+            type:
+              - 'null'
+              - string
+            description: The organisational name of the recipient
+          street:
+            type:
+              - 'null'
+              - string
+          city:
+            type:
+              - 'null'
+              - string
+          postalCode:
+            type:
+              - 'null'
+              - string
+          countryCode:
+            type:
+              - 'null'
+              - string
+      expectedShippingDates:
+        type: object
+        description: The minimum and maximum expected shipping dates
+        required:
+          - minimum
+          - maximum
+        properties:
+          minimum:
+            type: string
+            format: datetime
+          maximum:
+            type: string
+            format: datetime
+      provider:
+        type:
+          - 'null'
+          - string
+        description: The company providing the shipping service
+        enum:
+          - ups
+          - tnt
+          - gls
+          - dpd
+          - dhl
+          - dhl_express
+          - colissimo
+          - chronopost
+          - null
+      tracking:
+        type:
+          - 'null'
+          - object
+        description: Tracking details of the order
+        properties:
+          number:
+            type: string
+          link:
+            type: string
+            format: url
+            description: A URL to view the tracking status
+      latestQuote:
+        description: |-
+          The quote is the price of the parcel(s) shipping.
+          If this object is null then no quote has been generated.
+        type:
+          - 'null'
+          - object
+        properties:
+          id:
+            type: string
+            description: 'Id of the last quote generated. Every time a ship call is done, a new calculation is made based on parcels dimensions and weight sent'
+          provider:
+            type: string
+            enum:
+              - custom
+              - ups
+            description: |-
+              Provider responsible for the calculation. If custom, the calculation is done by Ankorstore and refunded.
+              If any other, the calculation is done by the provider and the shipping price is covered by Ankorstore (most of the case, see shippingCostsOverview section).
+          rateProvider:
+            type: string
+            description: The provider of the rate for `rateAmount`.
+            enum:
+              - ups
+              - ankorstore
+          rateAmount:
+            type: object
+            description: Amount calculated for the parcels provided.
+            properties:
+              amount:
+                $ref: '../../v1.yaml#/components/schemas/money'
+              currency:
+                type: string
+          shippingCostsOverview:
+            type: object
+            description: Overview of costs related to shipping. This object is displayed only if a shipping cost fee or a refund exists
+            properties:
+              amount:
+                $ref: '../../v1.yaml#/components/schemas/money'
+              currency:
+                type: string
+              type:
+                type: string
+                enum:
+                  - refund
+                  - fee
+                description: |-
+                  Type of shipping costs:
+                  If type = `refund` the amount will be refunded to the brand (added to brand net amount).
+                  if type = `fee` the amount will be subtracted from brand net amount as a contribution to shipping costs.
+        required:
+          - id
+          - provider
+      parcels:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/schemas/ShippingLabelParcelWithTrackedPackage'
+      transaction:
+        type:
+          - 'null'
+          - object
+        properties:
+          pickup:
+            description: 'The scheduled pickup, requires an API call to be made after the shipping labels have been generated.'
+            type:
+              - 'null'
+              - object
+            required:
+              - pickupDate
+              - closeTime
+              - readyTime
+              - externalReferenceId
+            properties:
+              pickupDate:
+                type: string
+                format: datetime
+                description: The date of the pickup
+              readyTime:
+                type: string
+                description: 'Opening time of pickup Eg: 10:00:00'
+              closeTime:
+                type: string
+                description: 'Close time (pickup required to happen before this time) Eg: 13:00:00'
+              externalReferenceId:
+                type: string
+                description: The reference number for this pickup
+          tracking:
+            description: The tracking details for the overall shipment
+            type: object
+            properties:
+              eta:
+                type:
+                  - 'null'
+                  - string
+                format: datetime
+                description: The estimated time of arrival for the order
+              trackingNumber:
+                type: string
+                description: The tracking number of the order
+              trackingLink:
+                type: string
+                format: url
+                description: The tracking link for the order
+              currentStatus:
+                $ref: '#/schemas/ShippingLabelCurrentStatus'
+        required:
+          - pickup
+          - tracking
+    required:
+      - availableShippingMethods
+      - shipToAddress
+      - expectedShippingDates
+  ShippingLabelCurrentStatus:
+    type: object
+    properties:
+      status:
+        type: string
+        description: The current status of the order/parcel
+        enum:
+          - UNKNOWN
+          - PRE_TRANSIT
+          - DELIVERED
+          - RETURND
+          - FAILURE
+      statusDetails:
+        description: Human readable version of status
+        type:
+          - string
+          - 'null'
+      updatedAt:
+        type: string
+        description: Last time the status was updated
+        format: datetime
+      location:
+        type: object
+        description: Last known location
+        properties:
+          city:
+            type:
+              - 'null'
+              - string
+          state:
+            type:
+              - 'null'
+              - string
+          zip:
+            type:
+              - 'null'
+              - string
+          country:
+            type:
+              - 'null'
+              - string
+  ShippingLabelParcel:
+    description: Shipping Label Parcel. Packages can be up to 400 cm in length and girth combined
+    type: object
+    properties:
+      length:
+        type: integer
+        maximum: 274
+      width:
+        type: integer
+        maximum: 274
+      height:
+        type: integer
+        maximum: 274
+      distanceUnit:
+        $ref: '../../v1.yaml#/components/schemas/distanceUnit'
+      weight:
+        type: integer
+        minimum: 1
+        maximum: 30000
+      massUnit:
+        $ref: '../../v1.yaml#/components/schemas/massUnit'
+    required:
+      - length
+      - width
+      - height
+      - distanceUnit
+      - weight
+      - massUnit
+  ShippingLabelParcelWithTrackedPackage:
+    description: Shipping Label Parcel
+    type: object
+    properties:
+      length:
+        type: integer
+        maximum: 274
+      width:
+        type: integer
+        maximum: 274
+      height:
+        type: integer
+        maximum: 274
+      distanceUnit:
+        $ref: '../../v1.yaml#/components/schemas/distanceUnit'
+      weight:
+        type: integer
+        minimum: 1
+        maximum: 30000
+      massUnit:
+        $ref: '../../v1.yaml#/components/schemas/massUnit'
+      trackedPackage:
+        type:
+          - 'null'
+          - object
+        description: The tracking per parcel
+        properties:
+          labelUrl:
+            description: The URL to download the shipping label
+            type:
+              - 'null'
+              - string
+            format: url
+          eta:
+            type:
+              - 'null'
+              - string
+            format: datetime
+          trackingNumber:
+            type: string
+          trackingLink:
+            type: string
+          currentStatus:
+            $ref: '#/schemas/ShippingLabelCurrentStatus'
+        required:
+          - labelUrl
+          - eta
+          - trackingLink
+          - currentStatus
+    required:
+      - length
+      - width
+      - height
+      - distanceUnit
+      - weight
+      - massUnit
+      - trackedPackage
+  OrderItem:
+    title: Order Item Resource
+    type: object
+    additionalProperties: false
+    examples:
+      - type: order-items
+        id: 62b263a8-00e1-1ecb-98d2-0242ac170007
+        attributes:
+          brandCurrency: EUR
+          quantity: 1
+          multipliedQuantity: 12
+          vatRate: 5.5
+          brandAmount: 3996
+          brandAmountVat: 220
+          brandAmountWithVat: 4216
+          brandUnitPrice: 333
+          createdAt: '2022-02-02T19:43:14.000000Z'
+          updatedAt: '2022-02-02T19:43:14.000000Z'
+        relationships:
+          productOption:
+            data:
+              type: productOption
+              id: '114135'
+    properties:
+      type:
+        $ref: '../../v1.yaml#/components/schemas/type'
+      id:
+        $ref: '../../v1.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          brandCurrency:
+            type: string
+            description: The currency of the amounts for the brand
+          quantity:
+            type: integer
+            description: The ordered quantity of the product
+          multipliedQuantity:
+            type: integer
+            description: 'Some products are sold in fixed quantities, e.g a case of 6 wine bottles. If the quantity was 2, the multiplied quantity of wine bottles would be 12 (6 x 2). This "unitMultiplier" can be found on the product.'
+          vatRate:
+            type: number
+            format: float
+            description: The VAT percentage rate of the order item (0-100)
+          brandAmount:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The amount due to the brand for this item
+          brandAmountVat:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The VAT amount due to the brand for this item
+          brandAmountWithVat:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The amount + VAT due to the brand for this item
+          brandUnitPrice:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The cost of a single unit of this item
+          createdAt:
+            type: string
+            format: datetime
+            description: The timestamp this order item was created
+          updatedAt:
+            type: string
+            format: datetime
+            description: The timestamp this order item was updated
+      relationships:
+        type: object
+        properties:
+          productOptions:
+            description: 'Reference: Product Option Resource'
+            type: object
+            properties:
+              data:
+                $ref: '../../v1.yaml#/components/schemas/relationshipToMany'
+      meta:
+        $ref: '../../v1.yaml#/components/schemas/meta'
+    required:
+      - type
+      - id
+  BillingItem:
+    title: Billing Item Resource
+    type: object
+    additionalProperties: false
+    examples:
+      - type: billing-items
+        id: f1dd6498-c5f8-1eca-a6b7-0242ac170007
+        attributes:
+          type: ankorstore_fees
+          currency: EUR
+          vatRate: 20
+          currencyRate: 1
+          amount: -1259
+          amountVat: -252
+          amountWithVat: -1511
+          createdAt: '2022-02-02T19:42:32.000000Z'
+          updatedAt: '2022-02-02T20:15:06.000000Z'
+    properties:
+      type:
+        $ref: '../../v1.yaml#/components/schemas/type'
+      id:
+        $ref: '../../v1.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          type:
+            description: |-
+              The `ankorstore_fees` type will be a negative amount which reduces the total amount paid to the brand.
+              The `shipping_fees` type also reduces the amount paid to the brand (but will be a positive value).
+              The `brand_shipping_fees_refund` type is positive and adds to the total amount paid.
+            type: string
+            enum:
+              - ankorstore_fees
+              - shipping_fees
+              - brand_shipping_fees_refund
+          currency:
+            type: string
+            description: The currency of the billing item
+          vatRate:
+            type: number
+            format: float
+            description: 'The VAT percentage rate of the billing item, (from 0 - 100).'
+          currencyRate:
+            type: number
+            format: float
+            description: 'If the currency is not in EUR, this is the conversion rate used'
+          amount:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The amount for the billing item
+          amountVat:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The VAT amount for the billing item
+          amountWithVat:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The amount including VAT for the billing item
+          createdAt:
+            type: string
+            format: datetime
+            description: The timestamp when the billing item was created
+          updatedAt:
+            type: string
+            format: datetime
+            description: The timestamp when the billing item was updated
+    required:
+      - type
+      - id
+  ConfirmSippingQuoteResponse:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          id:
+            type: string
+          uuid:
+            type: string
+          orderUuid:
+            type: string
+          provider:
+            type: string
+          currency:
+            type: string
+          shippingCost:
+            type: string
+            description: Shipping cost subtracted from total amount for ankorstore quote - Available only for ankorstore quote
+          refund:
+            type: string
+            description: Refund done to the brand for custom quote - Available only for custom quote
+      jsonapi:
+        $ref: '../../v1.yaml#/components/schemas/jsonapi'
+  ListShippingQuotesResponse:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        type: array
+        items:
+          type: object
+          description: Quote resource
+          properties:
+            quoteUuid:
+              type: string
+              description: The unique identifier for the quote as an uuid
+            carrierCode:
+              type: string
+              description: The carrier code for the quote
+            serviceCode:
+              type: string
+              description: The service code for the quote
+            serviceCommercialName:
+              type: string
+              description: The commercial name of the service
+            collectionMethod:
+              description: The collection method for the quote
+              type: array
+              items:
+                type: string
+                enum:
+                  - pickup
+                  - drop-off
+            shippingCost:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  description: The amount of the shipping cost
+                currency:
+                  type: string
+                  description: The currency of the shipping cost
+      jsonapi:
+        $ref: '../../v1.yaml#/components/schemas/jsonapi'
+parameters:
+  orderIncludeResourcesInQuery:
+    name: include
+    in: query
+    description: '[See supported values](https://ankorstore.stoplight.io/docs/ankorstore-api/cb282a9f5daef-working-with-orders#including-order-items-retailer-and-other-information)'
+    allowEmptyValue: true
+    required: false
+    schema:
+      type: string
+  orderIdInPath:
+    name: order
+    in: path
+    required: true
+    schema:
+      $ref: '../../v1.yaml#/components/schemas/id'
+      default: 079ba9ad-dcdb-4dda-ba0a-1174dad313c5
+  quoteIdInPath:
+    name: quoteId
+    in: path
+    required: true
+    schema:
+      $ref: '../../v1.yaml#/components/schemas/id'
+      default: 079ba9ad-dcdb-4dda-ba0a-1174dad313c5

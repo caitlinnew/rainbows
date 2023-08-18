@@ -1,0 +1,36 @@
+post:
+  summary: Validate platform for public integration
+  operationId: platform-verifications
+  description: Check shop url based on platform chosen
+  tags:
+    - Public Integrations
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/PlatformVerificationResponse'
+    '400':
+      description: Platform verification error
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: './components.yaml#/schemas/PlatformVerificationError'
+              jsonapi:
+                $ref: '../../internal.yaml#/components/schemas/jsonapi'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../../internal.yaml#/components/responses/UnprocessableEntity'
+  requestBody:
+    $ref: './components.yaml#/requestBodies/PlatformVerificationRequestBody'

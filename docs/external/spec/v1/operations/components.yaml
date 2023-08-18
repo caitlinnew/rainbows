@@ -1,0 +1,66 @@
+schemas:
+  BulkOperationResult:
+    title: BulkOperationResult
+    type: object
+    properties:
+      data:
+        type: object
+        required:
+          - type
+          - id
+        properties:
+          type:
+            $ref: '../../v1.yaml#/components/schemas/type'
+          id:
+            $ref: '../../v1.yaml#/components/schemas/id'
+          attributes:
+            type: object
+    required:
+      - data
+    description: Single operation result in the list of results in the bulk operation response
+    examples:
+      - data:
+          type: productVariant
+          id: 6b1a9a20-297c-4f26-8f00-70ece7c37ecd
+          attributes:
+            foo: bar
+responses:
+  BulkOperationsSuccessResponse:
+    description: Example response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            'atomic:results':
+              type: array
+              items:
+                $ref: '#/schemas/BulkOperationResult'
+requestBodies:
+  BulkOperationsProductVariantStockUpdate:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            'atomic:operations':
+              type: array
+              maxItems: 50
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  op:
+                    type: string
+                    enum:
+                      - update
+                  data:
+                    anyOf:
+                      - $ref: '../product-variants/components.yaml#/schemas/ProductVariantStockUpdateSetIsAlwaysInStock'
+                      - $ref: '../product-variants/components.yaml#/schemas/ProductVariantStockUpdateSetStockQuantity'
+                required:
+                  - op
+                  - data
+          required:
+            - 'atomic:operations'
+        examples: {}

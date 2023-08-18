@@ -1,0 +1,56 @@
+get:
+  summary: Get Payment service provider setup intent
+  operationId: payment-service-provider-setup-intent
+  description: Returns a single setup intent
+  tags:
+    - Invoicing
+  parameters:
+    - schema:
+        type: string
+      name: id
+      in: path
+      required: true
+      description: Setup Intent id
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/SetupIntentResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+post:
+  summary: Create a Payment Service Provider Setup Intent
+  operationId: create-invoicing-payment-service-setup-intent
+  description: Create new setup intent
+  tags:
+    - Invoicing
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/SetupIntentResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

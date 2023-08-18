@@ -1,0 +1,153 @@
+get:
+  summary: Search for products by query
+  tags:
+    - Mobile
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              paging:
+                page: 0
+                pages: 500
+                items_per_page: 2
+                total: 1405
+              data:
+                - id: 112233
+                  name: PlateTastics
+                  images:
+                    - /products/images/112233-asdfa2ac92fa6.jpg
+                    - /products/images/112233-4123asdbaxcvxeb.jpg
+                  retail_price:
+                    currency: EUR
+                    amount: 160
+                  wholesale_price:
+                    currency: EUR
+                    amount: 78
+                  location: France
+                  brand:
+                    id: 123
+                    name: We Sell Everything
+                    images:
+                      - /brands/rounded/123-47d64faujbbla9.jpg
+                - id: 332211
+                  name: Super plates
+                  images:
+                    - /products/images/332211-3fsfsdfasfc9ddb5.jpg
+                    - /products/images/332211-42241basdfsadfa.jpg
+                  retail_price:
+                    currency: EUR
+                    amount: 300
+                  wholesale_price:
+                    currency: EUR
+                    amount: 142
+                  location: United Kingdom
+                  brand:
+                    id: 321
+                    name: Plate Kings
+                    images:
+                      - /brands/rounded/321-4balsdfjbla12.jpg
+            properties:
+              paging:
+                type: object
+                required:
+                  - page
+                  - pages
+                  - items_per_page
+                  - total
+                properties:
+                  page:
+                    type: integer
+                  pages:
+                    type: integer
+                  items_per_page:
+                    type: integer
+                  total:
+                    type: integer
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    images:
+                      type: array
+                      items:
+                        type: string
+                    retail_price:
+                      $ref: '../internal.yaml#/components/schemas/amount'
+                    wholesale_price:
+                      $ref: '../internal.yaml#/components/schemas/amount'
+                    location:
+                      type: string
+                      example: France
+                    brand:
+                      type: object
+                      required:
+                        - id
+                        - name
+                        - images
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        images:
+                          type: array
+                          items:
+                            type: string
+                    image_base_url:
+                      type: string
+                      description: The base URL for product images
+                      example: 'https://img.ankorstore.com'
+                  required:
+                    - id
+                    - name
+                    - images
+                    - retail_price
+                    - wholesale_price
+                    - location
+                    - brand
+                    - image_base_url
+            required:
+              - paging
+              - data
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+  operationId: get-api-mobile-v1-search-products
+  description: Searches an Algolia products index against the given query.
+  parameters:
+    - schema:
+        type: string
+      in: query
+      name: query
+      required: true
+      description: The search query.
+    - schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      in: query
+      name: hitsPerPage
+      description: The total number of pages in the search response.
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/json
+    - schema:
+        type: integer
+        minimum: 0
+        maximum: 9223372036854776000
+      in: query
+      name: page
+      description: The current page of results (zero-indexed).

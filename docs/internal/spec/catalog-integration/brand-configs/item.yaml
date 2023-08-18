@@ -1,0 +1,30 @@
+get:
+  summary: Catalog integration configuration of a brand
+  operationId: get-api-internal-v1-catalog-integration-brand-config
+  description: Returns the catalog integration configuration of a brand
+  tags:
+    - Catalog Integration
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - schema:
+        type: string
+        format: uuid
+      name: brandConfigUuid
+      in: path
+      required: true
+      description: Catalog integration configuration UUID of a brand
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/CatalogIntegrationBrandConfigResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

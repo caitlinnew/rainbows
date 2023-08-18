@@ -1,0 +1,103 @@
+post:
+  summary: Create a new import batch with a google spreadsheet
+  responses:
+    '201':
+      description: OK
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                $ref: '../../internal.yaml#/components/schemas/jsonapi'
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    const: product-integration-batches
+                  id:
+                    $ref: '../../internal.yaml#/components/schemas/id'
+                  attributes:
+                    type: object
+                    properties:
+                      payload:
+                        type: object
+                        properties:
+                          spreadsheet_url:
+                            type: string
+                          drive_url:
+                            type: string
+                      workflow:
+                        type: string
+                        enum:
+                          - import
+                          - replace
+                          - update
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: 'product-integration-batches'
+                  id: '27'
+                  attributes:
+                    payload:
+                      spreadsheet_url: 'http://www.test.com'
+                      drive_url: 'http://www.test.com'
+                    workflow: 'import'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '429':
+      $ref: '../../internal.yaml#/components/responses/TooManyRequests'
+  operationId: post-api-internal-v1-catalog-integration-google-batches
+  tags:
+    - Catalog Integration
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          examples:
+            example-1:
+              data:
+                type: product-integration-batches
+                attributes:
+                  payload:
+                    spreadsheet_url: 'http://www.test.com'
+                    drive_url: 'http://www.test.com'
+                  workflow: 'import'
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    payload:
+                      type: object
+                      properties:
+                        spreadsheet_url:
+                          type: string
+                        drive_url:
+                          type: string
+                      required:
+                        - spreadsheet_url
+                        - drive_url
+                    workflow:
+                      type: string
+                      enum:
+                        - import
+                        - replace
+                        - update
+                  required:
+                    - payload
+                    - workflow
+  description: Create a new import batch with a google spreadsheet

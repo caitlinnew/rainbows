@@ -1,0 +1,75 @@
+parameters:
+  brandId:
+    schema:
+      type: string
+      format: uuid
+    name: brandId
+    in: path
+    required: true
+
+responses:
+  BrandResponse:
+    description: Single Brand resource response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          required:
+            - jsonapi
+            - data
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - type
+                  - attributes
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  type:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      status:
+                        type: string
+                  relationships:
+                    type: object
+                    properties:
+                      onboarding:
+                        type: object
+                        required:
+                          - data
+                        properties:
+                          data:
+                            type: object
+                            required:
+                              - id
+                              - type
+                            properties:
+                              id:
+                                type: string
+                                format: uuid
+                              type:
+                                type: string
+            included:
+              type: array
+              items:
+                type: object
+                required: []
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  type:
+                    type: string
+                  attributes:
+                    type: object

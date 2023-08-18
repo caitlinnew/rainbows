@@ -1,0 +1,21 @@
+get:
+  summary: Search for products related to a given brand
+  tags:
+    - Mobile
+  operationId: get-api-mobile-v1-search-brands-id-products
+  description: Returns search results for products related to a given brand.
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+    - schema:
+        type: string
+      name: brandId
+      in: path
+      required: true
+      description: Identifier of the target brand
+  responses:
+    '200':
+      description: OK
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'

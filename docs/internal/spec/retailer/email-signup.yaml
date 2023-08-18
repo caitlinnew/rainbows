@@ -1,0 +1,46 @@
+post:
+  summary: Retailer Email Signup
+  operationId: post-api-internal-v1-retailer-email-signup
+  description: 'Saves the user email in the retailer_leads table, returns a redirection to login path if a user with the provided email already exists in the user table'
+  tags:
+    - Retailer
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          example:
+            email: test@ankorstore.com
+          additionalProperties: false
+          properties:
+            email:
+              type: string
+              example: test@ankorstore.com
+              maxLength: 255
+      application/xml:
+        schema:
+          type: object
+          properties: { }
+      multipart/form-data:
+        schema:
+          type: object
+          properties: { }
+  responses:
+    '200':
+      description: Email found in retailer leads table but no account exists
+    '201':
+      description: Email added to the retailer leads table
+    '204':
+      description: Account already exist
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      description: 'Email is not valid, rfc or dns check failed'

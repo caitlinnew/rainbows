@@ -1,0 +1,77 @@
+schemas:
+  BaseFeeResource:
+    type: object
+    properties:
+      type:
+        type: string
+      amount:
+        type: '../../internal.yaml#/components/schemas/amount'
+      amountVat:
+        type: '../../internal.yaml#/components/schemas/amount'
+    required:
+      - type
+      - amount
+      - amountVat
+
+  ShippingFeeResource:
+    allOf:
+      - $ref: '#/schemas/BaseFeeResource'
+      - type: object
+      - properties:
+        type:
+          type: string
+          enum:
+            - shipping_fee
+        metadata:
+          type: object
+          properties:
+            isShippingFree:
+              type: boolean
+            freeShippingMinimumAmount:
+              type: '../../internal.yaml#/components/schemas/amount'
+            freeShippingRemainingAmount:
+              type: '../../internal.yaml#/components/schemas/amount'
+            regularShippingFeesAmount:
+              type: '../../internal.yaml#/components/schemas/amount'
+          required:
+            - isShippingFree
+            - freeShippingMinimumAmount
+            - freeShippingRemainingAmount
+            - regularShippingFeesAmount
+
+  HeavyBulkFeeResource:
+    allOf:
+      - $ref: '#/schemas/BaseFeeResource'
+      - type: object
+      - properties:
+        type:
+          type: string
+          enum:
+            - heavy_bulk_fee
+        metadata:
+          type: object
+          properties:
+            brand:
+              $ref: '../purchasing-lists/components.yaml#/schemas/PurchasableAggregateBrandResource'
+          required:
+            - brand
+
+  LongDistanceFeeResource:
+    allOf:
+      - $ref: '#/schemas/BaseFeeResource'
+      - type: object
+      - properties:
+        type:
+          type: string
+          enum:
+            - long_distance_fee
+        metadata:
+          type: object
+          properties:
+            brand:
+              $ref: '../purchasing-lists/components.yaml#/schemas/PurchasableAggregateBrandResource'
+            country:
+              $ref: '../components.yaml#/schemas/CountryResource'
+          required:
+            - brand
+            - country

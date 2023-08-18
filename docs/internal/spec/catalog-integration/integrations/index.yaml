@@ -1,0 +1,58 @@
+get:
+  summary: Returns list of Integrations for the current authenticated Brand
+  operationId: get-catalog-integration-integrations-integrations
+  description: Returns list of Integrations for the current authenticated Brand
+  parameters:
+    - schema:
+        type: integer
+        minimum: 1
+        default: 1
+      in: query
+      name: page
+      description: Results page number.
+    - schema:
+        type: integer
+        minimum: 1
+        maximum: 50
+        default: 50
+      in: query
+      name: perPage
+      description: Number of items returned per page.
+    - schema:
+        type: string
+        enum:
+          - id
+          - status
+          - type
+          - platform_product_id
+          - external_product_id
+          - internal_product_id
+          - product_updated_at
+          - integrated_at
+          - created_at
+          - updated_at
+        default: id
+      in: query
+      name: sort
+      description: Property to sort results by.
+    - schema:
+        type: boolean
+      in: query
+      name: 'filter[hasIssues]'
+      description: Keep only results with issues (true) or without issues (false).
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      $ref: '../components.yaml#/responses/IntegrationsListResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  tags:
+    - Catalog Integration

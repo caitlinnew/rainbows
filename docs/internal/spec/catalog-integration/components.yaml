@@ -1,0 +1,829 @@
+schemas:
+  CatalogIntegrationBrandConfigResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/CatalogIntegrationBrandConfig'
+  ProductIntegrationBatchResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/ProductIntegrationBatch'
+  id:
+    type: string
+    description: '[resource object identifier](https://jsonapi.org/format/#document-resource-object-identification)'
+  type:
+    type: string
+    description: '[resource object type](https://jsonapi.org/format/#document-resource-object-identification)'
+  CatalogIntegrationBrandConfig:
+    title: CatalogIntegrationBrandConfig
+    type: object
+    properties:
+      images_google_folder_url:
+        type: string
+        readOnly: true
+      generated_google_spreadsheet:
+        type: object
+        readOnly: true
+        properties:
+          instructions_sheet_url:
+            type: string
+            readOnly: true
+          data_sheet_url:
+            type: string
+            readOnly: true
+      created_at:
+        type: string
+        readOnly: true
+        format: date-time
+      updated_at:
+        type: string
+        readOnly: true
+        format: date-time
+  ProductIntegrationBatch:
+    title: ProductIntegrationBatchItem
+    type: object
+    properties:
+      fetched_count:
+        type: integer
+      imported_count:
+        type: integer
+      integrated_count:
+        type: integer
+      failed_count:
+        type: integer
+      created_count:
+        type: integer
+      updated_count:
+        type: integer
+      type:
+        type: string
+      import_type:
+        type: string
+        enum:
+          - add
+          - replace
+      workflow:
+        type: string
+        enum:
+          - import
+          - replace
+          - update
+          - activate
+      status:
+        type: string
+
+responses:
+  CatalogIntegrationBrandConfigResponse:
+    description: Catalog integration configuration of a brand
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/CatalogIntegrationBrandConfigResource'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+  ProductIntegrationBatchItemsCollectionResponse:
+    description: Set of product integration batch items
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/schemas/ProductIntegrationBatchResource'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+  ProductIntegrationResponseContent:
+    description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            links:
+              type: object
+              properties:
+                self:
+                  type: string
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                id:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    brand_id:
+                      type: integer
+                    type:
+                      type: string
+                    platform:
+                      type: 'null'
+                    status:
+                      type: string
+                    platform_product_id:
+                      type: string
+                    external_product_id:
+                      type: string
+                    internal_product_id:
+                      type: 'null'
+                    internal_state:
+                      type: object
+                      properties:
+                        images:
+                          type: array
+                          items:
+                            type: object
+                            properties: { }
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        unit_multiplier:
+                          type: integer
+                        currency:
+                          type: string
+                        discount_rate:
+                          type: integer
+                        retail_price:
+                          type: object
+                          properties:
+                            amount:
+                              type: integer
+                            currency:
+                              type: string
+                        wholesale_price:
+                          type: object
+                          properties:
+                            amount:
+                              type: integer
+                            currency:
+                              type: string
+                        original_wholesale_price:
+                          type: object
+                          properties:
+                            amount:
+                              type: integer
+                            currency:
+                              type: string
+                        vat_rate:
+                          type: integer
+                        categories:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              parent_id:
+                                type: integer
+                        properties:
+                          type: array
+                          items:
+                            type: object
+                            properties: { }
+                        tags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                        made_in:
+                          type: 'null'
+                        hs_code:
+                          type: 'null'
+                        variants:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: 'null'
+                              sku:
+                                type: string
+                              ian:
+                                type: string
+                              price:
+                                type: object
+                                properties:
+                                  currency:
+                                    type: string
+                                  retail_price:
+                                    type: object
+                                    properties:
+                                      amount:
+                                        type: integer
+                                      currency:
+                                        type: string
+                                  wholesale_price:
+                                    type: object
+                                    properties:
+                                      amount:
+                                        type: integer
+                                      currency:
+                                        type: string
+                                  original_wholesale_price:
+                                    type: object
+                                    properties:
+                                      amount:
+                                        type: integer
+                                      currency:
+                                        type: string
+                                  discount_rate:
+                                    type: integer
+                              stock:
+                                type: object
+                                properties:
+                                  id:
+                                    type: 'null'
+                                  stock_quantity:
+                                    type: integer
+                                  is_always_in_stock:
+                                    type: boolean
+                                  reserved_quantity:
+                                    type: integer
+                                  available_quantity:
+                                    type: integer
+                              shape_properties:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: [integer, null]
+                                    weight:
+                                      type: float
+                                    weight_unit:
+                                      type: string
+                                    length:
+                                      type: float
+                                    width:
+                                      type: float
+                                    height:
+                                      type: float
+                                    length_unit:
+                                      type: string
+                                    capacity:
+                                      type: float
+                                    capacity_unit:
+                                      type: string
+                              options:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                    name:
+                                      type: string
+                                    value:
+                                      type: string
+                              name:
+                                type: 'null'
+                              created_at:
+                                type: 'null'
+                              images:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    filename:
+                                      type: string
+                                    order:
+                                      type: integer
+                    issues:
+                      type: array
+                      items:
+                        type: object
+                        properties: { }
+                    internal_state_updated_at:
+                      type: string
+                    integrated_at:
+                      type: 'null'
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                links:
+                  type: object
+                  properties:
+                    self:
+                      type: string
+          example:
+            jsonapi:
+              version: '1.0'
+            links:
+              self: 'http://www.ankorlocal.com:8000/api/internal/v1/integrations/1ed3fd06-050a-6a00-8009-0242ac120003'
+            data:
+              type: integrations
+              id: 1ed3fd06-050a-6a00-8009-0242ac120003
+              attributes:
+                id: 9
+                brand_id: 22408
+                type: rutter
+                platform: null
+                status: integrated
+                platform_product_id: '7636912570603'
+                external_product_id: 198d8bbc-cdb7-469c-a4f8-472e0d1841ca
+                internal_product_id: null
+                internal_state:
+                  images: [ ]
+                  name: Juicy Orange
+                  description: 'Such a wonderful orange, you should buy it 1'
+                  unit_multiplier: 2
+                  currency: EUR
+                  discount_rate: 0
+                  retail_price:
+                    amount: 20
+                    currency: EUR
+                  wholesale_price:
+                    amount: 10
+                    currency: EUR
+                  original_wholesale_price:
+                    amount: 10
+                    currency: EUR
+                  vat_rate: 21
+                  categories:
+                    - id: 1269
+                      name: Gourmet
+                      parent_id: 1262
+                  properties: [ ]
+                  tags:
+                    - name: tags_fresh_product
+                  made_in: null
+                  hs_code: null
+                  variants:
+                    - id: null
+                      sku: orng-1
+                      ian: '1234567891234'
+                      price:
+                        currency: EUR
+                        retail_price:
+                          amount: 20
+                          currency: EUR
+                        wholesale_price:
+                          amount: 10
+                          currency: EUR
+                        original_wholesale_price:
+                          amount: 10
+                          currency: EUR
+                        discount_rate: 0
+                      stock:
+                        id: null
+                        stock_quantity: 16
+                        is_always_in_stock: false
+                        reserved_quantity: 0
+                        available_quantity: 16
+                      shape_properties:
+                        - id: null
+                          weight: 0.1
+                          weight_unit: kg
+                          length: 0.1
+                          width: 0.1
+                          height: 0.1
+                          length_unit: cm
+                          capacity: 0.1
+                          capacity_unit: l
+                      options:
+                        - id: 3
+                          name: other
+                          value: Default Title
+                      name: null
+                      created_at: null
+                      images:
+                        - filename: https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081
+                          order: 1
+                issues: [ ]
+                internal_state_updated_at: '2022-09-30T14:27:32.793045Z'
+                integrated_at: null
+                created_at: '2022-08-05T13:32:31.713000Z'
+                updated_at: '2022-09-30T14:27:32.811189Z'
+              links:
+                self: 'http://www.ankorlocal.com:8000/api/internal/v1/integrations/1ed3fd06-050a-6a00-8009-0242ac120003'
+  IntegrationsListResponse:
+    description: Set of product integration items
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/responses/ProductIntegrationResponseContent'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+  IntegrationStatisticsResponse:
+    description: Number of imported integrations for authenticated brand
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            meta:
+              type: object
+              additionalProperties: true
+              properties:
+                products_total_count:
+                  type: integer
+                products_without_issues_total_count:
+                  type: integer
+              required:
+                - products_total_count
+                - products_without_issues_total_count
+          required:
+            - meta
+            - jsonapi
+  FileSpreadsheetBatchesResponse:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          example:
+            jsonapi:
+              version: '1.0'
+            data:
+              type: product-integration-batches
+              id: '27'
+              attributes:
+                payload:
+                  spreadsheet_upload_file_id: 'file-upload:some-hash.csv'
+                workflow: 'import'
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                id:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    payload:
+                      type: object
+                      properties:
+                        spreadsheet_upload_file_id:
+                          type: string
+                    workflow:
+                      type: string
+                      enum:
+                        - import
+                        - replace
+                        - update
+  ProductSpreadsheetMappingResponseContent:
+    description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            links:
+              type: object
+              properties:
+                self:
+                  type: string
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                id:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                    name:
+                      type: integer
+                    user_id:
+                      type: integer
+                    is_custom:
+                      type: boolean
+                    configuration:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          identifier:
+                            type: string
+                          field:
+                            type: [string, integer, 'null']
+                          missingValue:
+                            type: [string, 'null']
+                          emptyValue:
+                            type: [ string, 'null' ]
+                          behavior:
+                            type: [ string, 'null' ]
+                links:
+                  type: object
+                  properties:
+                    self:
+                      type: string
+  ProductSpreadsheetMappingListResponse:
+    description: Set of product integration items
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/responses/ProductSpreadsheetMappingResponseContent'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+
+requests:
+  PatchProductIntegrationRequest:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                id:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    internal_state:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        description:
+                          type: string
+                        unit_multiplier:
+                          type: integer
+                        currency:
+                          type: string
+                        discount_rate:
+                          type: integer
+                        retail_price:
+                          type: integer
+                        wholesale_price:
+                          type: integer
+                        original_wholesale_price:
+                          type: integer
+                        vat_rate:
+                          type: integer
+                        currency_rate:
+                          type: integer
+                        categories:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                        properties:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              value:
+                                type: string
+                        tags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                        made_in:
+                          type: integer
+                        variants:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: 'null'
+                              sku:
+                                type: string
+                              ian:
+                                type: string
+                              currency_rate:
+                                type: integer
+                              currency:
+                                type: string
+                              price:
+                                type: object
+                                properties:
+                                  currency:
+                                    type: string
+                                  retail_price:
+                                    type: object
+                                    properties:
+                                      amount:
+                                        type: integer
+                                  wholesale_price:
+                                    type: object
+                                    properties:
+                                      amount:
+                                        type: integer
+                                  original_wholesale_price:
+                                    type: object
+                                    properties:
+                                      amount:
+                                        type: integer
+                                  discount_rate:
+                                    type: integer
+                              stock:
+                                type: object
+                                properties:
+                                  stock_quantity:
+                                    type: integer
+                                  is_always_in_stock:
+                                    type: boolean
+                                  reserved_quantity:
+                                    type: integer
+                                  available_quantity:
+                                    type: integer
+                              shape_properties:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: [integer, 'null']
+                                    weight:
+                                      type: float
+                                    weight_unit:
+                                      type: string
+                                    length:
+                                      type: float
+                                    width:
+                                      type: float
+                                    height:
+                                      type: float
+                                    length_unit:
+                                      type: string
+                                    capacity:
+                                      type: float
+                                    capacity_unit:
+                                      type: string
+                              options:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                    name:
+                                      type: string
+                                    value:
+                                      type: string
+                              name:
+                                type: string
+                              images:
+                                type: array
+          example:
+            data:
+              type: integrations
+              id: 1ed3fd06-050a-6a00-8009-0242ac120003
+              attributes:
+                internal_state:
+                  name: Juicy Orange
+                  description: 'Such a wonderful orange, you should buy it 1'
+                  unit_multiplier: 2
+                  currency: EUR
+                  discount_rate: 0
+                  retail_price: 20
+                  wholesale_price: 10
+                  original_wholesale_price: 10
+                  vat_rate: 21
+                  currency_rate: 1
+                  categories:
+                    - id: 1269
+                  properties:
+                    - name: Juicy Orange
+                      value: test
+                  tags:
+                    - name: tags_fresh_product
+                  made_in: 76
+                  variants:
+                    - id: null
+                      sku: orng-1
+                      ian: '1234567891234'
+                      currency_rate: 1
+                      currency: EUR
+                      price:
+                        currency: EUR
+                        retail_price:
+                          amount: 20
+                        wholesale_price:
+                          amount: 10
+                        original_wholesale_price:
+                          amount: 10
+                        discount_rate: 0
+                      stock:
+                        stock_quantity: 16
+                        is_always_in_stock: false
+                        reserved_quantity: 0
+                        available_quantity: 16
+                      shape_properties:
+                        - id: 1
+                          weight: 1
+                          weight_unit: kg
+                          length: 1
+                          width: 1
+                          height: 1
+                          length_unit: cm
+                          capacity: 1
+                          capacity_unit: l
+                      options:
+                        - id: 3
+                          name: other
+                          value: Default Title
+                      name: variant name
+                      images: ["/to-import/be0fadfa28780b2a90b5_1685957778.jpg" ]
+  FileSpreadsheetBatchesRequest:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          examples:
+            example-1:
+              data:
+                type: csv-batches
+                attributes:
+                  payload:
+                    spreadsheet_upload_file_id: 'file-upload:some-hash.csv'
+                  workflow: 'import'
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    payload:
+                      type: object
+                      properties:
+                        spreadsheet_upload_file_id:
+                          type: string
+                        file_spreadsheet_sheet:
+                          type: integer
+                          minimum: 0
+                        mapping_id:
+                          type: string
+                      required:
+                        - spreadsheet_upload_file_id
+                    workflow:
+                      type: string
+                      enum:
+                        - import
+                        - replace
+                        - update
+                  required:
+                    - payload
+                    - workflow

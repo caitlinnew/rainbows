@@ -1,0 +1,82 @@
+get:
+  summary: List Products
+  description: Returns all products
+  operationId: list-products
+  tags:
+    - Product
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: '../../v1.yaml#/components/parameters/pageLimit'
+    - $ref: '../../v1.yaml#/components/parameters/pageBefore'
+    - $ref: '../../v1.yaml#/components/parameters/pageAfter'
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/ProductCollection'
+          examples:
+            example:
+              value:
+                meta:
+                  page:
+                    from: 123e4567-e89b-12d3-a456-426614174000
+                    hasMore: true
+                    perPage: 2
+                    to: 1ecb023e-7ec0-6d5c-a477-0242ac170008
+                jsonapi:
+                  version: '1.0'
+                links:
+                  first: 'https://www.ankorstore.com/api/v1/orders?include=&page%5Blimit%5D=2'
+                  next: 'https://www.ankorstore.com/api/v1/orders?include=&page%5Bafter%5D=797910&page%5Blimit%5D=2'
+                  prev: 'https://www.ankorstore.com/api/v1/orders?include=&page%5Bbefore%5D=904234&page%5Blimit%5D=2'
+                data:
+                  - type: product
+                    id: 0c5e6540-0da9-1ecb-bf59-0242ac170007
+                    attributes:
+                      name: Example Product
+                      description: Example description of product
+                      language: fr
+                      dimensions: '5,5x5,5x6'
+                      netWeight: 100G
+                      capacity: 100g
+                      position: 34
+                      unitMultiplier: 12
+                      vatRate: 5.5
+                      discountRate: 0
+                      active: true
+                      outOfStock: false
+                      archived: false
+                      retailPrice: 750
+                      wholesalePrice: 426
+                      originalWholesalePrice: 426
+                      createdAt: '2020-08-27T14:26:38.000000Z'
+                      indexedAt: '2022-02-10T03:26:11.000000Z'
+                      updatedAt: '2022-02-09T14:49:09.000000Z'
+                  - type: product
+                    id: c8466a3c-4fb8-4474-a86f-20f10d14314f
+                    attributes:
+                      name: Example Product 2
+                      description: Example description of product 2
+                      language: fr
+                      dimensions: '10,5x10,5x12'
+                      netWeight: 250G
+                      capacity: 250g
+                      position: 20
+                      unitMultiplier: 12
+                      vatRate: 5.5
+                      discountRate: 0
+                      active: true
+                      outOfStock: false
+                      archived: false
+                      retailPrice: 900
+                      wholesalePrice: 700
+                      originalWholesalePrice: 700
+                      createdAt: '2020-09-27T14:26:38.000000Z'
+                      indexedAt: '2022-02-10T03:26:11.000000Z'
+                      updatedAt: '2022-02-09T14:49:09.000000Z'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'

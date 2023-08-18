@@ -1,0 +1,64 @@
+get:
+  summary: List Applications
+  operationId: list-applications
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/ApplicationsCollectionResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../internal.yaml#/components/responses/ServerError'
+  description: Returns list of existing application for current authenticated user
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  tags:
+    - Applications
+post:
+  summary: Create Application
+  operationId: create-application
+  description: 'Creates a new application. Endpoint returns client secret in the response payload, it can be seen only once.'
+  tags:
+    - Applications
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '201':
+      $ref: './components.yaml#/responses/ApplicationResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../internal.yaml#/components/responses/UnprocessableEntity'
+    '500':
+      $ref: '../internal.yaml#/components/responses/ServerError'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Name of application being created (should be unique among other applications belonging to the user)
+            developerEmail:
+              type: string
+              description: Developer email to contact in case of issues with created application
+          required:
+            - name
+            - developerEmail
+        examples: {}

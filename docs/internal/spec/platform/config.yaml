@@ -1,0 +1,19 @@
+get:
+  summary: Generic platform configuration
+  operationId: get-platform-config
+  description: Returns generic platform config parameters used for all users
+  tags:
+    - Users
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/PlatformConfigResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../internal.yaml#/components/responses/ServerError'

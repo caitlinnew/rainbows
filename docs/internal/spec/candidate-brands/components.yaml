@@ -1,0 +1,9 @@
+parameters:
+  candidateBrandId:
+    schema:
+      type: string
+      format: uuid
+    name: candidateBrandId
+    in: path
+    required: true
+    description: Candidate Brand ID

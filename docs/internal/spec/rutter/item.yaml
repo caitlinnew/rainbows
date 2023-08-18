@@ -1,0 +1,48 @@
+delete:
+  summary: Delete Rutter integration
+  operationId: delete-rutter-integration
+  description: Deletes Rutter integration with given ID
+  tags:
+    - Rutter
+  parameters:
+    - $ref: './components.yaml#/parameters/rutterIntegrationId'
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '204':
+      description: No Content
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+patch:
+  summary: Update Rutter Integration
+  operationId: update-rutter-integration
+  description: Updates the Rutter integration with given ID
+  tags:
+    - Rutter
+  parameters:
+    - $ref: './components.yaml#/parameters/rutterIntegrationId'
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/RutterIntegrationResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../internal.yaml#/components/responses/UnprocessableEntity'
+  requestBody:
+    $ref: './components.yaml#/requestBodies/UpdateRutterIntegrationRequestBody'

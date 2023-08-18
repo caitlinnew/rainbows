@@ -1,0 +1,41 @@
+post:
+  summary: Create a label
+  operationId: create-label
+  tags:
+    - Shipping
+  responses:
+    '200':
+      description: Label has previously been generated
+      $ref: '../components.yaml#/responses/LabelResponse'
+    '201':
+      description: Label has been created
+      $ref: '../components.yaml#/responses/LabelResponse'
+    '400':
+      $ref: '../../internal.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  description: Create a new label
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../components.yaml#/schemas/LabelCreation'
+        examples:
+          Example 1:
+            value:
+              fulfillmentOrderReference: O_F5SVAPCQ_722
+              containerReference: O_F5SVAPCQ_722-1
+              shipmentReference: BL00035904
+              service: AKS_PAR_AKS
+              width: 20
+              height: 30
+              length: 17
+              weight: 3000

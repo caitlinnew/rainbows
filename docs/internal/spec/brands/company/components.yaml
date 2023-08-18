@@ -1,0 +1,69 @@
+parameters:
+  companyId:
+    schema:
+      type: string
+      format: uuid
+    name: companyId
+    in: path
+    required: true
+    description: Company ID (same as Brand ID)
+schemas:
+  CompanyResource:
+    title: CompanyResource
+    type: object
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        required:
+          - founded_in_year
+          - company_name
+          - company_invoice_description
+          - tax_number
+          - vat_exemption
+          - vat_number
+          - sole_trader_number
+          - above_intracomm_threshold
+        properties:
+          founded_in_year:
+            type: integer
+          company_name:
+            type: string
+          company_invoice_description:
+            type: string
+          tax_number:
+            type:
+             - string
+             - 'null'
+          vat_exemption:
+            type: boolean
+          vat_number:
+            - string
+            - 'null'
+          sole_trader_number:
+            type:
+              - string
+              - 'null'
+          above_intracomm_threshold:
+            type: boolean
+    required:
+      - type
+      - id
+      - attributes
+responses:
+  CompanyResponse:
+    description: Single company resource response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/CompanyResource'
+            jsonapi:
+              $ref: '../../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data

@@ -1,0 +1,108 @@
+get:
+  summary: Get product prices and discounts from product ids
+  operationId: get-api-internal-v1-product-prices
+  description: Get product prices and discounts from product ids
+  tags:
+    - Product Prices
+  responses:
+    '200':
+      description: 'OK'
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                type: object
+                properties:
+                  version:
+                    type: string
+                additionalProperties: false
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    id:
+                      type: string
+                    attributes:
+                      type: object
+                      properties:
+                        originalWholesalePrice:
+                          type: object
+                          properties:
+                            currency:
+                              type: string
+                            amount:
+                              type: integer
+                        wholesalePrice:
+                          type: object
+                          properties:
+                            currency:
+                              type: string
+                            amount:
+                              type: integer
+                        retailPrice:
+                          type: object
+                          properties:
+                            currency:
+                              type: string
+                            amount:
+                              type: integer
+                        discountRate:
+                          type: integer
+            example:
+              jsonapi:
+                version: '1.0'
+              data:
+                - type: product-prices
+                  id: '3231389'
+                  attributes:
+                    originalWholesalePrice:
+                      currency: EUR
+                      amount: 1010
+                    wholesalePrice:
+                      currency: EUR
+                      amount: 1010
+                    retailPrice:
+                      currency: EUR
+                      amount: 2000
+                    discountRate: 0
+                - type: product-prices
+                  id: '3231391'
+                  attributes:
+                    originalWholesalePrice:
+                      currency: GBP
+                      amount: 674
+                    wholesalePrice:
+                      currency: GBP
+                      amount: 674
+                    retailPrice:
+                      currency: GBP
+                      amount: 899
+                    discountRate: 0
+                - type: product-prices
+                  id: '3231397'
+                  attributes:
+                    originalWholesalePrice:
+                      currency: GBP
+                      amount: 419
+                    wholesalePrice:
+                      currency: GBP
+                      amount: 419
+                    retailPrice:
+                      currency: GBP
+                      amount: 599
+                    discountRate: 0
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+  parameters:
+    - schema:
+        type: string
+      in: query
+      name: filter[id]
+      description: lists of product ids separated with a coma

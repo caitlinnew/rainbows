@@ -1,0 +1,51 @@
+get:
+  summary: Returns quantity adjustments
+  operationId: fulfillment-list-quantity-adjustments
+  description: Returns a list of quantity adjustments related to an item
+  tags:
+    - Fulfillment
+  parameters:
+    - schema:
+        type: string
+        format: uuid
+      name: id
+      in: path
+      required: true
+      description: Fulfillment item ID
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+    - schema:
+        type: integer
+      in: query
+      name: page[limit]
+    - schema:
+        type: integer
+      in: query
+      name: page[offset]
+    - schema:
+        type: string
+        enum:
+          - createdAt
+      name: sort
+      in: query
+      description: Specify what attribute(s) to sort by
+      allowEmptyValue: false
+      required: false
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/FulfillmentQuantityAdjustmentCollectionResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

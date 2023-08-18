@@ -1,0 +1,25 @@
+get:
+  summary: List of warehouses available to handle fulfillment
+  operationId: fulfillment-list-warehouses
+  description: Returns a list of warehouses available to provide fulfillment services
+  tags:
+    - Fulfillment
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/WarehousesCollectionResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

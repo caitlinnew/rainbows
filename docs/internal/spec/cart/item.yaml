@@ -1,0 +1,53 @@
+get:
+  summary: Get one cart and items data
+  operationId: get-one-cart
+  description: Get one cart and items data
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/id'
+  tags:
+    - Cart
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/CartResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+
+patch:
+  summary: Change the content of a cart's items (adds, remove or change their quantity)
+  operationId: patch-one-cart
+  description: Change the content of a cart's items (adds, remove or change their quantity)
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/id'
+  tags:
+    - Cart
+  requestBody:
+    required: true
+    content:
+      application/vnd.api+json:
+        schema:
+          $ref: './components.yaml#/schemas/PatchCartInput'
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/CartResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../internal.yaml#/components/responses/UnprocessableEntity'

@@ -1,0 +1,355 @@
+post:
+  summary: Transition an order
+  operationId: brand-transition-order
+  description: Transition an order to a new state. This endpoint can be used to accept an order (with or without modifications), reject an order or reset generated shipping labels currently. Please see the documentation for more information.
+  tags:
+    - Order
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/orderIdInPath'
+    - $ref: './components.yaml#/parameters/orderIncludeResourcesInQuery'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              oneOf:
+                - title: "Brand Accepts Payload"
+                  type: object
+                  required:
+                    - type
+                  properties:
+                    type:
+                      type: string
+                      description: The transition to use
+                      enum:
+                        - brand-validates
+                    attributes:
+                      type: object
+                      properties:
+                        orderItems:
+                          type: array
+                          uniqueItems: true
+                          description: |
+                            To accept the order as is, leave array empty.\
+                            To modify a single items quantity, include it with the new quantity value.\
+                            To remove an order item, specify its quantity as 0.\
+                            Some products are sold in fixed quantities, e.g a case of 6 wine bottles. To confirm a pack of 6 bottles pass a quantity of 1.
+                          items:
+                            type: object
+                            required:
+                              - id
+                              - type
+                              - attributes
+                            properties:
+                              id:
+                                type: string
+                                description: Order Item Uuid
+                              type:
+                                type: string
+                                enum:
+                                  - order-items
+                              attributes:
+                                type: object
+                                required:
+                                  - quantity
+                                properties:
+                                  quantity:
+                                    type: integer
+                                    description: A value of 0 indicates this order item will be removed. This value cannot go higher than the current quantity.
+                                    min: 0
+                - type: object
+                  title: "Brand Rejects Payload"
+                  required:
+                    - type
+                    - attributes
+                  properties:
+                    type:
+                      type: string
+                      description: The transition to use
+                      enum:
+                        - brand-rejects
+                    attributes:
+                      type: object
+                      required:
+                        - rejectType
+                      properties:
+                        rejectReason:
+                          type: string
+                          description: 'A detailed description of the reason for the order rejection. Required if reject type "OTHER" is used, optional for the rest of the predefined reject types'
+                          minLength: 1
+                          maxLength: 1000
+                          writeOnly: true
+                        rejectType:
+                          type: string
+                          description: One of the available reject reasons.
+                          enum:
+                            - BRAND_ALREADY_HAS_CUSTOMER_IN_THE_AREA
+                            - BRAND_CANNOT_DELIVER_TO_THE_AREA
+                            - BRAND_HAS_EXCLUSIVE_DISTRIBUTOR_IN_THE_REGION
+                            - BUYER_NOT_A_RETAILER
+                            - ORDER_ITEMS_PRICES_INCORRECT
+                            - PAYMENT_ISSUES_WITH_RETAILER
+                            - PREPARATION_TIME_TOO_HIGH
+                            - PRODUCT_OUT_OF_STOCK
+                            - PURCHASE_NOT_FOR_RESALE
+                            - RETAILER_AGREED_TO_DO_CHANGES_TO_ORDER
+                            - RETAILER_NOT_GOOD_FIT_FOR_BRAND
+                            - RETAILER_VAT_NUMBER_MISSING
+                            - OTHER
+                          writeOnly: true
+                - type: object
+                  title: "Brand Resets Shipping Labels Generation"
+                  required:
+                    - type
+                    - attributes
+                  properties:
+                    type:
+                      type: string
+                      description: The transition to use
+                      enum:
+                        - brand-resets-shipping-labels-generation
+                    attributes:
+                      type: object
+                      required:
+                        - resetType
+                      properties:
+                        resetType:
+                          type: string
+                          description: One of the available reset reasons.
+                          enum:
+                            - BRAND_NEED_MORE_LABELS_TO_SHIP
+                            - BRAND_PUT_WRONG_WEIGHT_DIMENSIONS
+                            - BRAND_SHIPS_WITH_DIFFERENT_CARRIER
+                            - PROBLEM_DURING_SHIPPING_LABEL_GENERATION
+                            - RETAILER_ASKED_DELIVERY_ADDRESS_CHANGE
+                            - SHIPPING_ADDRESS_MISMATCHES_PICKUP_ADDRESS
+                            - OTHER
+                          writeOnly: true
+                        reason:
+                          type: string
+                          description: 'A detailed description of the reason for resetting the generated shipping labels. Required if reset type "OTHER" is used, optional for the rest of the predefined reset types'
+                          minLength: 1
+                          maxLength: 300
+                          writeOnly: true
+        examples:
+          brand-validates:
+            value:
+              data:
+                type: brand-validates
+          brand-validates-with-modifications:
+            value:
+              data:
+                type: brand-validates
+                attributes:
+                  orderItems:
+                    - id: 1ecb023e-8ec0-6d5c-a477-0242ac170008
+                      type: order-items
+                      attributes:
+                        quantity: 5
+          brand-rejects-1:
+            value:
+              data:
+                type: brand-rejects
+                attributes:
+                  rejectType: BRAND_ALREADY_HAS_CUSTOMER_IN_THE_AREA
+          brand-rejects-2:
+            value:
+              data:
+                type: brand-rejects
+                attributes:
+                  rejectType: OTHER
+                  rejectReason: An example reason that justifies using OTHER
+          brand-resets-shipping-labels-generation-using-predefined-reason:
+            value:
+              data:
+                type: brand-resets-shipping-labels-generation
+                attributes:
+                  resetType: RETAILER_ASKED_DELIVERY_ADDRESS_CHANGE
+          brand-resets-shipping-labels-generation-using-custom-reason:
+            value:
+              data:
+                type: brand-resets-shipping-labels-generation
+                attributes:
+                  resetType: OTHER
+                  reason: An example reason that justifies using OTHER
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/OrderGet'
+          examples:
+            brand-validates:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: order
+                  id: 1ecb023e-8ec0-6d5c-a477-0242ac170007
+                  attributes:
+                    status: brand_confirmed
+                    reference: 3434273911
+                    brandCurrency: EUR
+                    brandNetAmount: 10229
+                    brandTotalAmount: 10940
+                    brandTotalAmountVat: 602
+                    brandTotalAmountWithVat: 11542
+                    brandRejectReason: null
+                    retailerRejectReason: null
+                    retailerCancellationRequestReason: null
+                    billingName: Charles Attan
+                    billingOrganisationName: Jumbo
+                    billingStreet: Kortricklaan 101
+                    billingPostalCode: 8121 GW
+                    billingCity: Arnhem
+                    billingCountryCode: NL
+                    submittedAt: '2022-03-17T13:19:33+00:00'
+                    shippedAt: null
+                    brandPaidAt: null
+                    createdAt: '2022-02-01T14:37:10+00:00'
+                    updatedAt: '2022-03-31T15:10:07+00:00'
+                    shippingMethod: null
+                    shippingOverview:
+                      availableShippingMethods:
+                        - custom
+                        - ankorstore
+                      shipToAddress:
+                        name: John Smith
+                        organisationName: Test
+                        street: Test Street
+                        city: Commentry
+                        postalCode: '03633'
+                        countryCode: FR
+                      expectedShippingDates:
+                        minimum: '2022-03-22T00:00:00+00:00'
+                        maximum: '2022-03-24T23:59:59+00:00'
+                      provider: null
+                      tracking: null
+                      latestQuote: null
+                      parcels: [ ]
+                      transaction: null
+            brand-validates-with-modifications:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: order
+                  id: 1ecb023e-8ec0-6d5c-a477-0242ac170007
+                  attributes:
+                    status: brand_confirmed
+                    reference: 3434273911
+                    brandCurrency: EUR
+                    brandNetAmount: 10229
+                    brandTotalAmount: 10940
+                    brandTotalAmountVat: 602
+                    brandTotalAmountWithVat: 11542
+                    brandRejectReason: null
+                    retailerRejectReason: null
+                    retailerCancellationRequestReason: null
+                    billingName: Charles Attan
+                    billingOrganisationName: Jumbo
+                    billingStreet: Kortricklaan 101
+                    billingPostalCode: 8121 GW
+                    billingCity: Arnhem
+                    billingCountryCode: NL
+                    submittedAt: '2022-03-17T13:19:33+00:00'
+                    shippedAt: null
+                    brandPaidAt: null
+                    createdAt: '2022-02-01T14:37:10+00:00'
+                    updatedAt: '2022-03-31T15:10:07+00:00'
+                    shippingMethod: null
+                    shippingOverview:
+                      availableShippingMethods:
+                        - custom
+                        - ankorstore
+                      shipToAddress:
+                        name: John Smith
+                        organisationName: Test
+                        street: Test Street
+                        city: Commentry
+                        postalCode: '03633'
+                        countryCode: FR
+                      expectedShippingDates:
+                        minimum: '2022-03-22T00:00:00+00:00'
+                        maximum: '2022-03-24T23:59:59+00:00'
+                      provider: null
+                      tracking: null
+                      latestQuote: null
+                      parcels: [ ]
+                      transaction: null
+            brand-rejects:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: order
+                  id: 1ecb023e-8ec0-6d5c-a477-0242ac170007
+                  attributes:
+                    status: cancelled
+                    reference: 3434273911
+                    brandCurrency: EUR
+                    brandNetAmount: 10229
+                    brandTotalAmount: 10940
+                    brandTotalAmountVat: 602
+                    brandTotalAmountWithVat: 11542
+                    brandRejectReason: null
+                    retailerRejectReason: null
+                    retailerCancellationRequestReason: null
+                    billingName: Charles Attan
+                    billingOrganisationName: Jumbo
+                    billingStreet: Kortricklaan 101
+                    billingPostalCode: 8121 GW
+                    billingCity: Arnhem
+                    billingCountryCode: NL
+                    submittedAt: '2022-03-17T13:19:33+00:00'
+                    shippedAt: null
+                    brandPaidAt: null
+                    createdAt: '2022-02-01T14:37:10+00:00'
+                    updatedAt: '2022-03-31T15:10:07+00:00'
+                    shippingMethod: null
+                    shippingOverview:
+                      availableShippingMethods:
+                        - custom
+                        - ankorstore
+                      shipToAddress:
+                        name: John Smith
+                        organisationName: Test
+                        street: Test Street
+                        city: Commentry
+                        postalCode: '03633'
+                        countryCode: FR
+                      expectedShippingDates:
+                        minimum: '2022-03-22T00:00:00+00:00'
+                        maximum: '2022-03-24T23:59:59+00:00'
+                      provider: null
+                      tracking: null
+                      latestQuote: null
+                      parcels: [ ]
+                      transaction: null
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../v1.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../v1.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '409':
+      description: Conflict
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../../v1.yaml#/components/schemas/failure'
+          example:
+            jsonapi:
+              version: '1.0'
+            errors:
+              - code: ORDER_ACTION_TRANSITION_FAILED
+                detail: Order cannot be transitioned using brand-validates from this state
+                status: '409'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'

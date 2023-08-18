@@ -1,0 +1,75 @@
+post:
+  summary: Schedule Pickup for order
+  operationId: brand-ship-order-schedule-pickup
+  description: Use this endpoint for scheduling a pickup for the order
+  tags:
+    - Shipping
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/orderIdInPath'
+    - $ref: './components.yaml#/parameters/orderIncludeResourcesInQuery'
+  responses:
+    '200':
+      description: Order Resource
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/OrderGet'
+    '403':
+      $ref: '../../v1.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../../v1.yaml#/components/responses/UnprocessableEntity'
+    '500':
+      description: Internal Server Error
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '../../v1.yaml#/components/schemas/failure'
+          example:
+            jsonapi:
+              version: string
+            errors:
+              - code: INTERNAL_ERROR
+                detail: 'Cannot ship the order: {...}'
+                status: '500'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            order:
+              oneOf:
+                - type: object
+                  description: Tracking Provider + Number
+                  required:
+                    - pickupDate
+                    - pickupTime
+                    - pickupAddress
+                  properties:
+                    pickupDate:
+                      type: string
+                      description: Requested date for the pickup
+                    pickupTime:
+                      description: Time period for the pickup (9-15 or 11-17)
+                      type: string
+                    pickupAddress:
+                      description: Address for the pickup
+                      type: object
+        examples:
+          example:
+            value:
+              pickupDate: 07-04-2022
+              pickupTime: 9-15
+              pickupAddress:
+                name: John Doe
+                contactName: John Doe
+                countryCode: FR
+                city: Rennes
+                postalCode: '35000'
+                street: 1 rue des lilas
+                phoneNumber: '+33700000000'

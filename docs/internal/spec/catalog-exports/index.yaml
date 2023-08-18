@@ -1,0 +1,20 @@
+get:
+  summary: Read all catalog exports sorted by descending creation date
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      $ref: './exports/components.yaml#/responses/ListResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../internal.yaml#/components/responses/ServerError'
+  description: Read all catalog exports sorted by descending creation date
+  operationId: get-api-internal-v1-catalog-exports
+  tags:
+    - Catalog Export

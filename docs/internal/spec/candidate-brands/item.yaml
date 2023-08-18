@@ -1,0 +1,56 @@
+get:
+  summary: Get Candidate Brand
+  operationId: get-api-internal-v1-candidate-brands-id
+  description: Returns Email and first name of candidate brand's user
+  tags:
+    - Candidate Brand
+  parameters:
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+    - schema:
+        type: string
+        format: uuid
+      name: candidateBrandId
+      in: path
+      required: true
+      description: Candidate Brand ID
+  responses:
+    '200':
+      description: OK
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              jsonapi:
+                $ref: '../internal.yaml#/components/schemas/jsonapi'
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  id:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      firstName:
+                        type: string
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: candidate-brands
+                  id: 1ed0283e-68a2-6108-917d-0242ac120007
+                  attributes:
+                    email: julien.stanek@ankorstore.com
+                    firstName: Tomas
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'

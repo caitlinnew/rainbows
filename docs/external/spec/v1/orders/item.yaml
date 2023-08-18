@@ -1,0 +1,140 @@
+get:
+  summary: Get Order
+  description: Retrieve a specific order
+  operationId: get-order
+  tags:
+    - Order
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/orderIdInPath'
+    - $ref: './components.yaml#/parameters/orderIncludeResourcesInQuery'
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/OrderGet'
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: order
+                  id: 1ecb023e-7ec0-6d5c-a477-0242ac170009
+                  attributes:
+                    status: invoiced
+                    reference: 3434273911
+                    brandCurrency: EUR
+                    brandNetAmount: 20596
+                    brandTotalAmount: 23405
+                    brandTotalAmountVat: 0
+                    brandTotalAmountWithVat: 23405
+                    brandRejectReason: null
+                    retailerRejectReason: null
+                    retailerCancellationRequestReason: null
+                    billingName: Charles Attan
+                    billingOrganisationName: Jumbo
+                    billingStreet: Kortricklaan 101
+                    billingPostalCode: 8121 GW
+                    billingCity: Arnhem
+                    billingCountryCode: NL
+                    submittedAt: '2022-03-15T10:05:09+00:00'
+                    shippedAt: '2022-03-17T15:05:19+00:00'
+                    brandPaidAt: null
+                    createdAt: '2022-03-13T16:36:24+00:00'
+                    updatedAt: '2022-03-31T11:57:13+00:00'
+                    shippingMethod: ankorstore
+                    shippingOverview:
+                      availableShippingMethods:
+                        - custom
+                        - ankorstore
+                      shipToAddress:
+                        name: John Smith
+                        organisationName: TEST RETAILER
+                        street: Test Street 14
+                        city: DEN HAAG
+                        postalCode: 3333HC
+                        countryCode: NL
+                      expectedShippingDates:
+                        minimum: '2022-03-18T00:00:00+00:00'
+                        maximum: '2022-03-22T23:59:59+00:00'
+                      provider: ups
+                      tracking: null
+                      latestQuote:
+                        id: 5cc76f26-0f5d-1ecb-a0d6-0242ac170009
+                        provider: ups
+                        rateAmount:
+                          amount: 1359
+                          currency: EUR
+                        rateProvider: ankorstore
+                        shippingCostsOverview:
+                          amount: 1037
+                          currency: EUR
+                          type: fee
+                      parcels:
+                        - length: 30
+                          width: 60
+                          height: 40
+                          weight: 16500
+                          distanceUnit: cm
+                          massUnit: g
+                          trackedPackage:
+                            labelUrl: null
+                            eta: null
+                            trackingNumber: 1Z8A76119134110028
+                            trackingLink: 'https://www.ups.com/track?tracknum=1Z8A76119134110028&requester=WT/trackdetails'
+                            currentStatus:
+                              status: DELIVERED
+                              statusDetails: Delivered
+                              updatedAt: '2022-03-21T10:36:46+00:00'
+                              location:
+                                city: DEN HAAG
+                                state: null
+                                zip: 3333HC
+                                country: NL
+                      transaction:
+                        pickup:
+                          pickupDate: '2022-03-18T00:00:00+00:00'
+                          closeTime: '15:00:00'
+                          readyTime: '09:00:00'
+                          externalReferenceId: 29QGCN35P8R
+                        tracking:
+                          eta: null
+                          trackingNumber: 1Z8A76E493544110028
+                          trackingLink: 'https://www.ups.com/track?tracknum=1Z8A76E493544110028&requester=WT/trackdetails'
+                          currentStatus:
+                            status: DELIVERED
+                            statusDetails: Delivered
+                            updatedAt: '2022-03-21T10:36:46+00:00'
+                            location:
+                              city: DEN HAAG
+                              state: null
+                              zip: 3333HC
+                              country: NL
+                included:
+                  - type: retailer
+                    id: 3b656e82-0260-1ecb-9e4c-0242ac170007
+                    attributes:
+                      companyName: null
+                      storeName: TEST RETAILER
+                      storeUrl: null
+                      email: test_retailer@gmail.com
+                      firstName: Test
+                      lastName: Retailer
+                      taxNumber: '222270824'
+                      vatNumber: FR52222470824
+                      eoriNumber: null
+                      phoneNumberE164: '+33688615666'
+                      businessIdentifier: '819470111'
+                      createdAt: '2020-06-19T11:59:30.000000Z'
+                      updatedAt: '2020-06-21T15:27:39.000000Z'
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '404':
+      $ref: '../../v1.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'

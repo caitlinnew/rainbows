@@ -1,0 +1,79 @@
+get:
+  summary: Get Brand's company
+  operationId: get-brands-company
+  description: Gets Brand's company details
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/companyId'
+  tags:
+    - Brands
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/CompanyResponse'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+patch:
+  summary: Update Brand's company
+  operationId: update-brands-company
+  description: Updates Brand's company details
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/companyId'
+  tags:
+    - Brands
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/CompanyResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../../internal.yaml#/components/responses/UnprocessableEntity'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            founded_in_year:
+              type: integer
+            company_name:
+              type: string
+            company_invoice_description:
+              type: string
+            vat_exemption:
+              type: boolean
+            vat_number:
+              type: string
+            tax_number:
+              type: string
+            is_sole_trader:
+              type: boolean
+            sole_trader_number:
+              type: string
+            above_intracomm_threshold:
+              type:
+                - boolean
+                - 'null'
+          required:
+            - founded_in_year
+            - company_name
+            - company_invoice_description
+            - vat_exemption
+        example:
+          founded_in_year: 1984
+          company_name: My company
+          company_invoice_description: Paris
+          tax_number: '123456824'
+          vat_exemption: true

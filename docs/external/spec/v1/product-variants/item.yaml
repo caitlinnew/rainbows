@@ -1,0 +1,23 @@
+get:
+  summary: Get product variant with stock
+  description: Get product variant with stock
+  operationId: get-product-variant-with-stock
+  tags:
+    - Product
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/productVariantInPath'
+  responses:
+    '200':
+      description: '[OK](https://jsonapi.org/format/#fetching-resources-responses-200)'
+      $ref: './components.yaml#/responses/ProductVariantResponse'
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../v1.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../v1.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'

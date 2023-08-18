@@ -1,0 +1,37 @@
+get:
+  summary: List Fulfillable
+  operationId: fulfillment-list-fulfillable
+  description: Returns a list of fulfillable's availability
+  tags:
+    - Fulfillment
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/FulfillmentFulfillableCollectionResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+    - name: 'fulfillableIds[]'
+      in: query
+      description: A set of UUIDs representing the fulfillables to check availability for.
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
+        minItems: 1

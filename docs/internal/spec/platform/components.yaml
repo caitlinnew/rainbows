@@ -1,0 +1,36 @@
+responses:
+  PlatformConfigResponse:
+    description: Generic platform config parameters used for all users
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/PlatformConfigResource'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+
+schemas:
+  PlatformConfig:
+    type: object
+    properties:
+      cdn:
+        type: string
+      stripePublicKey:
+        type: string
+  PlatformConfigResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/PlatformConfig'
+    required:
+      - type
+      - id
+      - attributes

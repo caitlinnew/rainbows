@@ -1,0 +1,175 @@
+parameters:
+  rutterIntegrationId:
+    schema:
+      type: string
+      example: '123'
+    name: id
+    in: path
+    required: true
+    description: ID of the target Rutter Integration
+
+requestBodies:
+  UpdateRutterIntegrationRequestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              required:
+                - type
+                - id
+                - attributes
+              properties:
+                type:
+                  $ref: '../internal.yaml#/components/schemas/type'
+                id:
+                  $ref: '../internal.yaml#/components/schemas/id'
+                attributes:
+                  type: object
+                  properties:
+                    orderTags:
+                      $ref: './components.yaml#/schemas/RutterOrderTags'
+                    configuration:
+                      $ref: './components.yaml#/schemas/RutterConfiguration'
+          required:
+            - data
+        examples:
+          example-update-order-tags:
+            value:
+              data:
+                type: rutter-integrations
+                id: '123'
+                attributes:
+                  orderTags:
+                    - Ankorstore
+                    - order
+
+schemas:
+  RutterIntegration:
+    type: object
+    examples:
+      - type: rutter-integrations
+        id: '123'
+        attributes:
+          accessToken: 937c5af4-d0a4-46b5-820d-300e75d982a5
+          platformName: SHOPIFY
+    properties:
+      type:
+        type: string
+        example: rutter-integrations
+        default: rutter-integrations
+        readOnly: true
+      id:
+        type: string
+        description: In the current implementation this ID matches the ID of the target brand. In the future most probably will be replaced with Rutter ingeration entity identifier.
+        readOnly: true
+      attributes:
+        type: object
+        required:
+          - accessToken
+          - platformName
+        properties:
+          accessToken:
+            type: string
+            description: Access token received from Rutter API
+            example: 937c5af4-d0a4-46b5-820d-300e75d982a5
+            readOnly: true
+          platformName:
+            type: string
+            description: Target platform name
+            example: SHOPIFY
+            readOnly: true
+          orderTags:
+            $ref: './components.yaml#/schemas/RutterOrderTags'
+          configuration:
+            $ref: './components.yaml#/schemas/RutterConfiguration'
+    required:
+      - type
+      - id
+      - attributes
+  RutterOrderTags:
+    type: array
+    title: Rutter Order Tags
+    description: List of order tags to be added to each new order synchronized to external Rutter platform
+    examples:
+      - - Ankorstore
+        - External
+    maxItems: 5
+    uniqueItems: true
+    items:
+      type: string
+      minLength: 1
+      maxLength: 36
+  RutterConfiguration:
+    description: Configuration parameters for the integration
+    oneOf:
+      - type: 'null'
+      - title: 'ShopifyIntegrationConfiguration'
+        description: Configuration for the Shopify integration
+        type: object
+        properties:
+          order_default_financial_status:
+            description: Initial financial status for all order synced to Shopify
+            type: string
+          inventory_policy:
+            description: Inventory policy for new orders created on Shopify.
+            type: string
+          inventory_synchronization:
+            description: To enable/disable synchronization of Shopify inventory to Ankorstore.
+            type: boolean
+          catalog_synchronization:
+            description: To initiate full catalog synchronization from Shopify to Ankorstore.
+            type: boolean
+          catalog_continuous_synchronization:
+            description: To enable/disable continuous catalog synchronization (prices) from Shopify to Ankorstore.
+            type: boolean
+          catalog_synchronization_workflow:
+            description: Product integration workflow to use for catalog synchronization from Shopify to Ankorstore.
+            type: string
+            enum: [ 'import', 'update' ]
+          shopify_catalog_price_strategy:
+            description: Strategy to use for price synchronization from Shopify to Ankorstore.
+            type: string
+            enum: [ 'retail', 'wholesale' ]
+          shopify_catalog_price_multiplier:
+            description: Multiplier (as float) to use for price synchronization from Shopify to Ankorstore.
+            type: number
+
+responses:
+  RutterIntegrationResponse:
+    description: Single rutter integration resource response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: './components.yaml#/schemas/RutterIntegration'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi
+    headers:
+      Content-Type:
+        schema:
+          type: string
+        description: application/vnd.api+json
+  RutterIntegrationsCollectionResponse:
+    description: Rutter integration resource collection response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: './components.yaml#/schemas/RutterIntegration'
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+            - jsonapi

@@ -1,0 +1,101 @@
+extends:
+  - "@ankorstore/spectral-api-ruleset"
+
+overrides:
+  - files:
+      - "v1.yaml#/paths/~1api~1v1~1orders~1%7Border%7D~1ship~1custom/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/shipping"
+      - "v1.yaml#/paths/~1api~1v1~1orders~1%7Border%7D~1shipping-quotes/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/parcels"
+      - "v1.yaml#/paths/~1api~1v1~1orders~1%7Border%7D~1shipping-quotes/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/no_dangerous_product"
+      - "v1.yaml#/paths/~1api~1v1~1orders~1%7Border%7D~1ship~1ankorstore/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/shipping"
+      - "v1.yaml#/paths/~1api~1v1~1shipping-quotes~1%7BquoteId%7D~1confirm/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/labelFormat"
+      - "v1.yaml#/paths/~1api~1v1~1shipping-quotes~1%7BquoteId%7D~1confirm/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/tracking"
+      - "v1.yaml#/paths/~1api~1v1~1orders~1%7Border%7D~1ship~1confirm/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/order"
+      - "v1.yaml#/paths/~1api~1v1~1orders~1%7Border%7D~1ship~1schedule-pickup/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/order"
+      - "v1.yaml#/paths/~1api~1v1~1orders~1%7Border%7D~1reject/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/order"
+      - "v1.yaml#/paths/~1api~1v1~1operations/post/responses/200/content/application~1vnd.api%2Bjson/schema/properties/atomic%3Aresults"
+      - "v1.yaml#/paths/~1api~1v1~1operations/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/atomic%3Aoperations"
+      - "v1.yaml#/paths/~1api~1testing~1orders~1create/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/retailerId"
+      - "v1.yaml#/paths/~1api~1testing~1orders~1create/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/itemQuantity"
+      - "v1.yaml#/paths/~1api~1testing~1orders~1create/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/productVariants"
+      - "v1.yaml#/paths/~1api~1testing~1orders~1create/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/productOptions"
+    rules:
+      top-level-json-properties: warn
+  - files:
+      - "internal.yaml#/paths/~1api~1internal~1v1~1applications/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1applications/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/developerEmail"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1applications~1%7BapplicationId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1applications~1%7BapplicationId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/developerEmail"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1%7BbrandId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/status"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/founded_in_year"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/company_name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/company_invoice_description"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/vat_exemption"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/vat_number"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/tax_number"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/is_sole_trader"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/sole_trader_number"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1company~1%7BcompanyId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/above_intracomm_threshold"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1shipping-settings~1%7BshippingSettingsId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/publicAddress"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1shipping-settings~1%7BshippingSettingsId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/shippingAddress"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1shipping-settings~1%7BshippingSettingsId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/billingAddress"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1shipping-settings~1%7BshippingSettingsId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/eoriNumber"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1shipping-settings~1%7BshippingSettingsId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/lucidNumber"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1shipping-settings~1%7BshippingSettingsId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/averageLeadTime"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1brands~1shipping-settings~1%7BshippingSettingsId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/whitelistCountries"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1webhook-subscriptions~1%7BwebhookSubscriptionId%7D/patch/requestBody/content/application~1vnd.api%2Bjson/schema/properties/required"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1rutter-integrations~1store-shopify/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/platformUrl"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1rutter-integrations~1store-shopify/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/adminAccessToken"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1rutter-integrations~1store-shopify/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/apiSecretKey"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-exports/post/requestBody/content/application~1vnd.api%2Bjson/schema/properties/type"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1operations/post/requestBody/content/application~1json/schema/properties/atomic:operations/items/properties/data/properties/attributes/properties/brandId"
+    rules:
+      top-level-json-properties: warn
+  - files:
+      - "internal.yaml#/paths/~1api~1internal~1v1~1webhook-subscriptions/post/responses/201/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1webhook-subscriptions~1%7BwebhookSubscriptionId%7D/patch/responses/200/content/application~1json"
+      - "internal.yaml#/paths/~1api~1mobile~1v1~1search~1products/get/responses/200/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1rutter-integrations~1send-test-order/post/responses/200/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-integration~1product-spreadsheet-mappings~1%7BproductSpreadsheetMappingId%7D/get/responses/200/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1offer-programme~1touch-points/get/responses/200/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1testimonials/get/responses/200/content/application~1json"
+    rules:
+      response-content-type: warn
+  - files:
+      - "internal.yaml#/paths/~1api~1internal~1v1~1rutter-integrations/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1fulfillment~1orders/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1fulfillment~1replenishments/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1fulfillment~1fulfillment-brands/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1ordering~1non-ankorstore-fulfillment-orders/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1retailer~1email-signup/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1retailer~1email-signup/post/requestBody/content/application~1xml"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1retailer~1email-signup/post/requestBody/content/multipart~1form-data"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-integration~1integrations~1%7BcatalogIntegrationId%7D/patch/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1operations/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1shipping~1labels/post/requestBody/content/application~1json"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1ordering~1non-ankorstore-fulfillment-orders.post.requestBody.content.application~1json"
+    rules:
+      request-content-type: warn
+  - files:
+      - "internal.yaml#/paths/~1api~1internal~1v1~1rutter-integrations~1%7Bid%7D/patch/requestBody/content/application~1vnd.api%2Bjson/examples/example-update-order-tags/value/data/id"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-integration~1product-integration-batches~1google-batches/post/responses/201/content/application~1vnd.api%2Bjson/examples/example/value/data/id"
+    rules:
+      oas3-valid-media-example: warn
+  - files:
+      - "internal.yaml#/paths/~1api~1mobile~1v1~1search~1products/get/responses/200/content/application~1json/schema/example"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-integration~1integrations/get/responses/200/content/application~1vnd.api%2Bjson/schema/properties/data/items/content/application~1vnd.api%2Bjson/schema/example"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1offer-programmes~1eligibles/get/responses/200/content/application~1vnd.api%2Bjson/schema/example"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-integration~1integrations~1%7BcatalogIntegrationId%7D/patch/requestBody/content/application~1json/schema/example"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-integration~1integrations~1%7BcatalogIntegrationId%7D/patch/responses/200/content/application~1vnd.api%2Bjson/schema/example"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1catalog-integration~1integrations~1%7BcatalogIntegrationId%7D/get/responses/200/content/application~1vnd.api%2Bjson/schema/example"
+    rules:
+      oas3-valid-schema-example: warn
+  - files:
+      - "internal.yaml#/paths/~1api~1mobile~1v1~1search~1products/get/parameters/0/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1fulfillment~1replenishments/get/parameters/1/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1fulfillment~1replenishments/get/parameters/2/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1fulfillment~1items/get/parameters/1/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1fulfillment~1items/get/parameters/2/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1invoicing~1service-invoices/get/parameters/1/name"
+      - "internal.yaml#/paths/~1api~1internal~1v1~1invoicing~1service-invoices/get/parameters/2/name"
+    rules:
+      implementation-specific-query-parameter-names: warn

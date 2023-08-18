@@ -1,0 +1,32 @@
+get:
+  summary: Details of a single warehouse
+  operationId: fulfillment-get-warehouse
+  description: Returns details of a warehouse
+  tags:
+    - Fulfillment
+  parameters:
+    - schema:
+        type: string
+        format: uuid
+      name: id
+      in: path
+      required: true
+      description: Warehouse ID
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/WarehouseResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

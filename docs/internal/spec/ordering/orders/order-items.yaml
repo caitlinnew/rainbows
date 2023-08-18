@@ -1,0 +1,27 @@
+get:
+  operationId: ordering-list-order-items
+  description: Returns a list of order items belonging to the order with given UUID
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/OrderItemsCollectionResponse'
+    '400':
+      $ref: '../../internal.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - in: query
+      name: include
+      description: Include related resources in the response
+      schema:
+        type: string
+        enum:
+          - orderedProduct

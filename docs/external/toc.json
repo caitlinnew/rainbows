@@ -1,0 +1,89 @@
+{
+  "items": [
+    {
+      "type": "divider",
+      "title": "Ankorstore Public API"
+    },
+    {
+      "type": "item",
+      "title": "Overview",
+      "uri": "pages/overview.md"
+    },
+    {
+      "type": "item",
+      "title": "Working with JSON:API",
+      "uri": "pages/working-with-jsonapi.md"
+    },
+    {
+      "type": "item",
+      "title": "Authentication",
+      "uri": "pages/authentication.md"
+    },
+    {
+      "type": "item",
+      "title": "Webhooks",
+      "uri": "pages/webhooks.md"
+    },
+    {
+      "type": "group",
+      "title": "Order",
+      "items": [
+        {
+          "type": "item",
+          "title": "Working with Orders",
+          "uri": "pages/order/working-with-orders.md"
+        },
+        {
+          "type": "item",
+          "title": "Interacting with Orders",
+          "uri": "pages/order/interacting-with-orders.md"
+        },
+        {
+          "type": "item",
+          "title": "Shipping an Order",
+          "uri": "pages/order/shipping-an-order.md"
+        },
+        {
+          "type": "item",
+          "title": "Shipping an Order [Deprecated]",
+          "uri": "pages/order/shipping-an-order-deprecated.md"
+        },
+        {
+          "type": "item",
+          "title": "Creating Test Orders",
+          "uri": "pages/order/creating-test-orders.md"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "title": "Product",
+      "items": [
+        {
+          "type": "item",
+          "title": "Options vs Variants",
+          "uri": "pages/product/options-vs-variants.md"
+        },
+        {
+          "type": "item",
+          "title": "Working with Products",
+          "uri": "pages/product/working-with-products.md"
+        },
+        {
+          "type": "item",
+          "title": "Stock Management",
+          "uri": "pages/product/product-stock-management.md"
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "title": "API Reference"
+    },
+    {
+      "type": "item",
+      "title": "Ankorstore Public API v1",
+      "uri": "spec/v1.yaml"
+    }
+  ]
+}

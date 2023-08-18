@@ -1,0 +1,13 @@
+get:
+  summary: List categories
+  operationId: get-api-internal-v1-categories
+  description: Returns the list of categories
+  tags:
+    - Categories
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/CategoryCollectionResponse'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'

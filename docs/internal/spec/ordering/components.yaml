@@ -1,0 +1,1085 @@
+requests:
+  NonAnkorstoreFulfillmentOrderRequest:
+    type: object
+    properties:
+      shippingAddress:
+        description: Shipping address for the recipient. Required for order creation
+        $ref: '#/schemas/ExternalOrderShippingAddress'
+      items:
+        type: array
+        items:
+          type: object
+          $ref: '#/schemas/NonAnkorstoreFulfillmentOrderItem'
+    required:
+      - shippingAddress
+      - items
+
+responses:
+  MasterOrderResponse:
+    description: Single Master Order
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            data:
+              $ref: '#/resources/MasterOrderResource'
+            included:
+              type: array
+              items:
+                type: object
+                oneOf:
+                  - $ref: '#/resources/OrderShippingResource'
+                  - $ref: '#/resources/OrderItemResource'
+          required:
+            - data
+            - jsonapi
+  MasterOrdersCollectionResponse:
+    description: Collection of master orders
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            data:
+              type: array
+              items:
+                $ref: '#/resources/MasterOrderResource'
+            included:
+              type: array
+              items:
+                type: object
+                oneOf:
+                  - $ref: '#/resources/OrderShippingResource'
+                  - $ref: '#/resources/OrderItemResource'
+          required:
+            - data
+            - jsonapi
+  OrderItemsCollectionResponse:
+    description: Collection of order items
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            jsonapi:
+              $ref: '../internal.yaml#/components/schemas/jsonapi'
+            data:
+              type: array
+              items:
+                $ref: '#/resources/OrderItemResource'
+            included:
+              type: array
+              items:
+                $ref: '#/resources/OrderedProductResource'
+          required:
+            - data
+            - jsonapi
+  MasterOrderUuidResponse:
+    description: Return Master Order Uuid
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              properties:
+                masterOrderUuid:
+                  type: string
+          required:
+            - data
+
+resources:
+  MasterOrderResource:
+    type: object
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/MasterOrder'
+      relationships:
+        type: object
+        properties:
+          orderItems:
+            type: object
+            properties:
+              data:
+                $ref: '../internal.yaml#/components/schemas/relationshipToMany'
+          orderShipping:
+            type: object
+            properties:
+              data:
+                $ref: '../internal.yaml#/components/schemas/relationshipToMany'
+    required:
+      - type
+      - id
+      - attributes
+  OrderItemResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/OrderItem'
+      relationships:
+        type: object
+        properties:
+          orderedProduct:
+            $ref: '../internal.yaml#/components/schemas/relationshipToOne'
+  OrderedProductResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/OrderedProduct'
+  OrderShippingResource:
+    properties:
+      type:
+        $ref: '../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../internal.yaml#/components/schemas/id'
+      attributes:
+        $ref: '#/schemas/MasterOrderShipping'
+
+schemas:
+  MoneyBag:
+    type: object
+    properties:
+      amount:
+        type: integer
+      currency:
+        type: string
+    required:
+      - amount
+      - currency
+  NullableMoneyBag:
+    oneOf:
+      - type: 'null'
+      - type: object
+        $ref: '#/schemas/MoneyBag'
+  AddressSet:
+    type: object
+    properties:
+      address:
+        type: object
+        properties:
+          countryCode:
+            type: [ 'null', string ]
+          postalCode:
+            type: [ 'null', string ]
+          city:
+            type: [ 'null', string ]
+          addressLine:
+            type: [ 'null', string ]
+        required:
+          - countryCode
+          - postalCode
+          - city
+          - addressLine
+      company:
+        type: [ 'null', string ]
+      contactPerson:
+        type: object
+        properties:
+          firstName:
+            type: [ 'null', string ]
+          lastName:
+            type: [ 'null', string ]
+          fullName:
+            type: [ 'null', string ]
+          phoneNumber:
+            type: [ 'null', string ]
+          email:
+            type: [ 'null', string ]
+            format: email
+        required:
+          - firstName
+          - lastName
+          - fullName
+          - phoneNumber
+          - email
+    required:
+      - address
+      - company
+      - contactPerson
+  Parcel:
+    type: object
+    properties:
+      weight:
+        type: [ 'null', integer ]
+      height:
+        type: [ 'null', integer ]
+      length:
+        type: [ 'null', integer ]
+      width:
+        type: [ 'null', integer ]
+    required:
+      - weight
+      - height
+      - length
+      - width
+  ExternalOrderShippingAddress:
+    type: object
+    properties:
+      country:
+        type: string
+        pattern: '^[A-Z]{2}$'
+      postalCode:
+        type: string
+      city:
+        type: string
+        minLength: 1
+      street:
+        type: string
+        minLength: 1
+      company:
+        type: string
+      firstName:
+        type: string
+        minLength: 1
+      lastName:
+        type: string
+        minLength: 1
+      phone:
+        type: string
+        minLength: 1
+      email:
+        type: string
+    required:
+      - country
+      - postalCode
+      - city
+      - street
+      - company
+      - firstName
+      - lastName
+      - phone
+      - email
+  NonAnkorstoreFulfillmentOrderItem:
+    type: object
+    properties:
+      fulfillableId:
+        type: string
+        format: uuid
+      quantity:
+        type: integer
+        description: quantity in units
+    required:
+      - fulfillableId
+      - quantity
+  MasterOrderShipping:
+    type: object
+    properties:
+      shippingMethod:
+        oneOf:
+          - type: 'null'
+          - type: string
+            enum:
+              - custom
+              - ankorstore
+              - fulfillment
+      isAddingTrackingInformationPostponed:
+        type: ['null', boolean]
+      stockOrigin:
+        oneOf:
+          - type: 'null'
+          - type: string
+            enum:
+              - directShipping
+              - fulfillmentCenter
+    required:
+      - shippingMethod
+      - isAddingTrackingInformationPostponed
+      - stockOrigin
+  MasterOrder:
+    type: object
+    properties:
+      type:
+        type: string
+        description: Type of wrapped order
+        enum:
+          - internal
+          - external
+      createdAt:
+        type: string
+        format: date-time
+      reference:
+        type: string
+        pattern: '^[EI][A-NP-Z]{3}[1-9]{7}$'
+      masterStatus:
+        type: string
+        enum:
+          - created
+          - prepared
+          - shipped
+          - delivered
+          - completed
+          - cancelled
+      status:
+        type: object
+        properties:
+          name:
+            type: string
+          shortTitle:
+            type: string
+          title:
+            type:
+              - 'null'
+              - string
+          details:
+            type:
+              - 'null'
+              - string
+        required:
+          - name
+          - key
+          - title
+          - details
+      internalId:
+        type:
+          - 'null'
+          - integer
+      totals:
+        oneOf:
+          - type: 'null'
+          - type: object
+            $ref: '#/schemas/OrderTotals'
+      brand:
+        $ref: '#/schemas/OrderBrand'
+      updates:
+        oneOf:
+          - type: 'null'
+          - type: object
+            $ref: '#/schemas/OrderUpdates'
+      taxes:
+        oneOf:
+          - type: 'null'
+          - type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                amount:
+                  $ref: '#/schemas/MoneyBag'
+              required:
+                - name
+                - amount
+      priorityTag:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              name:
+                type: string
+              isActive:
+                type: boolean
+            required:
+              - name
+              - isActive
+      vat:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              isShifted:
+                type: boolean
+              applicationDetails:
+                oneOf:
+                  - type: 'null'
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                      link:
+                        oneOf:
+                          - type: 'null'
+                          - type: object
+                            properties:
+                              href:
+                                type: string
+                              text:
+                                type: string
+                            required:
+                              - href
+                              - text
+                    required:
+                      - message
+                      - link
+            required:
+              - isShifted
+              - applicationDetails
+      deadlines:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              toShip:
+                type:
+                  - 'null'
+                  - string
+                format: date-time
+              toAccept:
+                type:
+                  - 'null'
+                  - string
+                format: date-time
+            required:
+              - toShip
+              - toAccept
+      synchronizations:
+        oneOf:
+          - type: 'null'
+          - type: array
+            items:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - publicApp
+                platformName:
+                  type: string
+                  enum:
+                    - WOO_COMMERCE
+                    - SHOPIFY
+                error:
+                  type:
+                    - 'null'
+                    - string
+            required:
+              - type
+              - platformName
+              - error
+      invoices:
+        oneOf:
+          - type: 'null'
+          - type: array
+            items:
+              type: object
+              properties:
+                isGenerated:
+                  type: boolean
+                title:
+                  type: string
+                number:
+                  type:
+                    - 'null'
+                    - string
+                path:
+                  type:
+                    - 'null'
+                    - string
+              required:
+                - isGenerated
+                - title
+                - number
+                - path
+      shipping:
+        $ref: '#/schemas/OrderShipping'
+      tracking:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              trackingNumber:
+                type:
+                  - 'null'
+                  - string
+              trackingLink:
+                type:
+                  - 'null'
+                  - string
+              status:
+                type:
+                  - 'null'
+                  - string
+            required:
+              - trackingNumber
+              - trackingLink
+              - status
+      billing:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              billingItems:
+                type: array
+                items:
+                  $ref: '#/schemas/OrderBillingItem'
+            required:
+              - billingItems
+      issue:
+        oneOf:
+          - type: 'null'
+          - type: object
+            $ref: '#/schemas/OrderIssue'
+      retailer:
+        $ref: '#/schemas/OrderRetailer'
+      rejection:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              brandRejectType:
+                type:
+                  - 'null'
+                  - string
+              availableBrandRejectReasons:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rejectType:
+                      type: string
+                    rejectTypeLabel:
+                      type: string
+                  required:
+                    - rejectType
+                    - rejectTypeLabel
+              isRetailerCancellationRequestOpened:
+                type: boolean
+            required:
+              - brandRejectType
+              - availableBrandRejectReasons
+              - isRetailerCancellationRequestOpened
+      meta:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              showAlcoholWarning:
+                type: boolean
+              showManualInvoiceDownloadWarning:
+                type: boolean
+    required:
+      - type
+      - masterStatus
+      - status
+      - reference
+      - createdAt
+      - internalId
+      - totals
+      - brand
+      - updates
+      - taxes
+      - priorityTag
+      - vat
+      - deadlines
+      - synchronizations
+      - invoices
+      - shipping
+      - tracking
+      - billing
+      - issue
+      - retailer
+      - rejection
+      - meta
+  OrderTotals:
+    type: object
+    properties:
+      totalAmount:
+        $ref: '#/schemas/MoneyBag'
+      totalVatAmount:
+        $ref: '#/schemas/MoneyBag'
+      totalAmountWithVat:
+        $ref: '#/schemas/MoneyBag'
+      netAmount:
+        $ref: '#/schemas/MoneyBag'
+    required:
+      - totalAmount
+      - totalVatAmount
+      - totalAmountWithVat
+      - netAmount
+  OrderBrand:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      link:
+        type: string
+        format: url
+      display_address:
+        type: object
+        properties:
+          city:
+            type: string
+        required:
+          - city
+    required:
+      - id
+      - name
+      - link
+      - display_address
+  OrderUpdates:
+    type: object
+    properties:
+      oldTotalAmount:
+        $ref: '#/schemas/MoneyBag'
+      oldTotalAmountVat:
+        $ref: '#/schemas/MoneyBag'
+      oldTotalAmountWithVat:
+        $ref: '#/schemas/MoneyBag'
+      oldRecargoAmount:
+        $ref: '#/schemas/NullableMoneyBag'
+      itemUpdates:
+        type: array
+        items:
+          type: object
+          properties:
+            itemId:
+              type: string
+            oldQuantity:
+              type: integer
+            oldMultipliedQuantity:
+              type: integer
+            oldAmount:
+              $ref: '#/schemas/MoneyBag'
+          required:
+            - itemId
+            - oldQuantity
+            - oldMultipliedQuantity
+            - oldAmount
+    required:
+      - oldTotalAmount
+      - oldTotalAmountVat
+      - oldTotalAmountWithVat
+      - oldRecargoAmount
+      - itemUpdates
+  OrderBillingItem:
+    type: object
+    properties:
+      id:
+        type: integer
+      type:
+        type: string
+      label:
+        type: string
+      displayVat:
+        type: boolean
+      isVatShifted:
+        type: boolean
+      amount:
+        type: object
+        $ref: '#/schemas/NullableMoneyBag'
+      amountVat:
+        type: object
+        $ref: '#/schemas/NullableMoneyBag'
+      amountWithVat:
+        type: object
+        $ref: '#/schemas/NullableMoneyBag'
+    required:
+      - id
+      - type
+      - label
+      - displayVat
+      - isVatShifted
+      - vatLabel
+      - amount
+      - amountVat
+      - amountWithVat
+  OrderIssue:
+    type: object
+    properties:
+      casesVisibleToBrand:
+        type: array
+        items:
+          type: string
+      casesAllowedToBeSentToBrand:
+        items:
+          type: string
+      current:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              id:
+                type: integer
+              status:
+                type: string
+              escalatedToCsByBrand:
+                type: boolean
+              escalatedToCsToAdjustQuantityByBrand:
+                type: boolean
+              escalatedToCsOnReship:
+                type: boolean
+              autoEscalatedToCs:
+                type: boolean
+              autoEscalatedToCsOnReship:
+                type: boolean
+              send_to_brand_enabled:
+                type: boolean
+              escalatedNewClaimToCs:
+                type: [ 'null', boolean ]
+              reason:
+                type: string
+              shippedDate:
+                type: string
+              autoEscalateDate:
+                type: string
+              trackingLink:
+                type: string
+              trackingNumber:
+                type: string
+              shippingProvider:
+                type: string
+              reshippedDate:
+                type: [ 'null', string ]
+              products:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    sku:
+                      type: string
+                    description:
+                      type: string
+                    quantity:
+                      type: integer
+                    files:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                        required:
+                          - url
+                  required:
+                    - id
+                    - name
+                    - sku
+                    - description
+                    - quantity
+                    - files
+              packagingFiles:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                  required:
+                    - url
+              parcelReservationFiles:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                  required:
+                    - url
+              parcelContentFiles:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                  required:
+                    - url
+              options:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    label:
+                      type: string
+                    text:
+                      type: string
+                  required:
+                    - label
+                    - text
+            required:
+              - id
+              - status
+              - escalatedToCsByBrand
+              - escalatedToCsToAdjustQuantityByBrand
+              - escalatedToCsOnReship
+              - autoEscalatedToCs
+              - autoEscalatedToCsOnReship
+              - send_to_brand_enabled
+              - escalatedNewClaimToCs
+              - reason
+              - shippedDate
+              - autoEscalateDate
+              - trackingLink
+              - trackingNumber
+              - shippingProvider
+              - reshippedDate
+              - products
+              - packagingFiles
+              - parcelReservationFiles
+              - parcelContentFiles
+              - options
+    required:
+      - casesVisibleToBrand
+      - casesAllowedToBeSentToBrand
+      - current
+  OrderRetailer:
+    type: object
+    properties:
+      id:
+        type: [ 'null', integer ]
+      name:
+        type: string
+      email:
+        type: string
+        format: email
+      phone_number:
+        type: string
+      city:
+        type: string
+      business:
+        type: object
+        properties:
+          user_first_name:
+            type: string
+          user_last_name:
+            type: string
+          vat_number:
+            type: ['null', string]
+          tax_number:
+            type: ['null', string]
+          country:
+            type: object
+            properties:
+              iso_code:
+                type: string
+            required:
+              - iso_code
+        required:
+          - user_first_name
+          - user_last_name
+          - vat_number
+          - tax_number
+          - country
+    required:
+      - id
+      - name
+      - email
+      - phone_number
+      - city
+      - business
+  OrderShipping:
+    type: object
+    properties:
+      shippingProvider:
+        type: [ 'null', string ]
+      isInternational:
+        type: boolean
+      hasShippingLabelGenerationError:
+        type: boolean
+      hasRevertedShippingLabels:
+        type: boolean
+      fees:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              amount:
+                $ref: '#/schemas/NullableMoneyBag'
+              refundAmount:
+                $ref: '#/schemas/NullableMoneyBag'
+            required:
+              - amount
+              - refundAmount
+      shippingAddress:
+        $ref: '#/schemas/AddressSet'
+      availableShippingMethods:
+        oneOf:
+          - type: 'null'
+          - type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  enum:
+                    - custom
+                    - ankorstore
+                    - fulfillment
+                canBeUsed:
+                  type: boolean
+                errors:
+                  oneOf:
+                  - type: array
+                    items:
+                      type: string
+                  - type: object
+              required:
+                - name
+                - canBeUsed
+                - errors
+      shipmentEstimation:
+        oneOf:
+          - type: 'null'
+          - type: object
+            $ref: '#/schemas/OrderShipmentEstimation'
+      shipment:
+        oneOf:
+          - type: 'null'
+          - type: object
+            $ref: '#/schemas/OrderShipment'
+    required:
+      - shippingProvider
+      - isInternational
+      - hasShippingLabelGenerationError
+      - hasRevertedShippingLabels
+      - fees
+      - shippingAddress
+      - availableShippingMethods
+      - shipmentEstimation
+      - shipment
+  OrderShipmentEstimation:
+    type: object
+    properties:
+      collectionMethods:
+        type: array
+        items:
+          type: string
+          enum:
+            - pickup
+            - drop-off
+      rateProvider:
+        type: [ 'null', string ]
+      rateAmount:
+        $ref: '#/schemas/NullableMoneyBag'
+      estimatedParcels:
+        type: array
+        items:
+          $ref: '#/schemas/Parcel'
+    required:
+      - collectionMethods
+      - rateProvider
+      - rateAmount
+      - estimatedParcels
+  OrderShipment:
+    type: object
+    properties:
+      shippedAt:
+        type: [ 'null', string ]
+        format: date-time
+      labelPrintingFormat:
+        type: string
+        enum:
+          - default
+          - full_page
+      trackedPackages:
+        type: array
+        items:
+          type: object
+          properties:
+            labelUrl:
+              type: [ 'null', string ]
+              format: url
+            parcel:
+              $ref: '#/schemas/Parcel'
+      shipFromAddress:
+        $ref: '#/schemas/AddressSet'
+      pickup:
+        oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              date:
+                type: string
+                format: date-time
+              readyTime:
+                type: string
+              closeTime:
+                type: string
+            required:
+              - date
+              - readyTime
+              - closeTime
+      labelRevertReasons:
+        type: array
+        items:
+          type: object
+          properties:
+            actionType:
+              type: string
+            actionReason:
+              type: string
+          required:
+            - actionType
+            - actionReason
+    required:
+      - shippedAt
+      - labelPrintingFormat
+      - trackedPackages
+      - shipFromAddress
+      - pickup
+      - labelRevertReasons
+  OrderItem:
+    type: object
+    properties:
+      internalId:
+        type: [ 'null', integer ]
+      unitQuantity:
+        type: integer
+      batchQuantity:
+        type: integer
+      unitPrice:
+        $ref: '#/schemas/NullableMoneyBag'
+      totalPrice:
+        $ref: '#/schemas/NullableMoneyBag'
+    required:
+      - internalId
+      - unitQuantity
+      - batchQuantity
+      - unitPrice
+      - totalPrice
+  OrderedProduct:
+    type: object
+    properties:
+      fulfillableId:
+        type: [ 'null' , string]
+        format: uuid
+      sku:
+        type: string
+      name:
+        type: string
+      pageUrl:
+        type: string
+      images:
+        type: array
+        items:
+          type: string
+      options:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            value:
+              type: [ 'null', string ]
+          required:
+            - name
+            - value
+    required:
+      - fulfillableId
+      - sku
+      - name
+      - pageUrl
+      - images
+      - options

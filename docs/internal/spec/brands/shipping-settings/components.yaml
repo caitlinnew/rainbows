@@ -1,0 +1,106 @@
+parameters:
+  shippingSettingsId:
+    schema:
+      type: string
+      format: uuid
+    name: shippingSettingsId
+    in: path
+    required: true
+    description: Shipping settings ID (same as Brand ID)
+schemas:
+  ShippingSettingsResource:
+    title: ShippingSettingsResource
+    type: object
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        required:
+          - publicAddress
+          - shippingAddress
+          - billingAddress
+          - eoriNumber
+          - lucidNumber
+          - averageLeadTime
+          - whitelistCountries
+        properties:
+          publicAddress:
+            type: object
+            properties:
+              street:
+                type: string
+              postalCode:
+                type: string
+              city:
+                type: string
+              countryCode:
+                type: string
+            required:
+              - street
+              - postalCode
+              - city
+              - countryCode
+          shippingAddress:
+            type: object
+            properties:
+              street:
+                type: string
+              postalCode:
+                type: string
+              city:
+                type: string
+              countryCode:
+                type: string
+            required:
+              - street
+              - postalCode
+              - city
+              - countryCode
+          billingAddress:
+            type: object
+            properties:
+              street:
+                type: string
+              postalCode:
+                type: string
+              city:
+                type: string
+              countryCode:
+                type: string
+            required:
+              - street
+              - postalCode
+              - city
+              - countryCode
+          eoriNumber:
+            type: string
+          lucidNumber:
+            type: string
+          averageLeadTime:
+            type: string
+          whitelistCountries:
+            type: array
+            items:
+              type: string
+            description: List of country iso codes
+    required:
+      - type
+      - id
+      - attributes
+responses:
+  ShippingSettingsResponse:
+    description: Single shipping settings resource response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/ShippingSettingsResource'
+            jsonapi:
+              $ref: '../../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data

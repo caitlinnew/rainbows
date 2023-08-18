@@ -1,0 +1,258 @@
+schemas:
+  ProductOption:
+    title: Product Option Resource
+    description: A unique option for a product
+    type: object
+    additionalProperties: false
+    examples:
+      - type: productOption
+        id: 7ec06d5c-023e-1ecb-a477-0242ac170007
+        attributes:
+          name: Test Product Option
+          sku: '051100'
+          ian: '3770005999506'
+          outOfStock: false
+          createdAt: '2020-08-27T14:29:15.000000Z'
+          updatedAt: '2021-10-04T12:03:31.000000Z'
+          archivedAt: null
+        relationships:
+          product:
+            data:
+              type: product
+              id: 7f4665f6-023e-1ecb-a4b2-0242ac170007
+    properties:
+      type:
+        $ref: '../../v1.yaml#/components/schemas/type'
+      id:
+        $ref: '../../v1.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the option
+          sku:
+            type: string
+            description: The SKU of the option
+          ian:
+            type:
+              - 'null'
+              - string
+            description: 'The IAN (EAN) of the option, can be null'
+          outOfStock:
+            type: boolean
+            description: Whether the product is in stock or not
+          createdAt:
+            type: string
+            format: datetime
+            description: Timestamp of when this option was created
+          updatedAt:
+            type: string
+            format: datetime
+            description: Timestamp of when this option was updated
+          archivedAt:
+            type:
+              - 'null'
+              - string
+            description: Timestamp of when this option was archived
+      relationships:
+        type: object
+        properties:
+          product:
+            description: 'Reference: Product Resource'
+            type: object
+            properties:
+              data:
+                $ref: '../../v1.yaml#/components/schemas/relationshipToOne'
+    required:
+      - type
+      - id
+  ProductVariantCollection:
+    type: object
+    required:
+      - data
+    properties:
+      data:
+        description: List of Product Variant resource objects
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/schemas/ProductVariant'
+      meta:
+        $ref: '../../v1.yaml#/components/schemas/paginationMeta'
+      links:
+        $ref: '../../v1.yaml#/components/schemas/paginationLinks'
+      jsonapi:
+        $ref: '../../v1.yaml#/components/schemas/jsonapi'
+    additionalProperties: false
+    title: Product Variant Collection
+  ProductVariant:
+    title: Product Variant Resource
+    description: Variant details for a given product. Unique products will have one single variant.
+    type: object
+    additionalProperties: false
+    examples:
+      - type: productVariant
+        id: 2171bdc1-fa01-44fa-9342-d99bd1c2befa
+        attributes:
+          name: Test Product Variant
+          sku: Product-Variant-001
+          ian: '1924859325863'
+          createdAt: '2020-08-27T14:29:15.000000Z'
+          updatedAt: '2021-10-04T12:03:31.000000Z'
+          archivedAt: null
+          retailPrice: 800
+          wholesalePrice: 500
+          originalWholesalePrice: 500
+          availableQuantity: 125
+          reservedQuantity: 25
+          stockQuantity: 150
+          isAlwaysInStock: false
+        relationships:
+          product:
+            data:
+              type: product
+              id: c8466a3c-4fb8-4474-a86f-20f10d14314f
+    properties:
+      type:
+        $ref: '../../v1.yaml#/components/schemas/type'
+      id:
+        $ref: '../../v1.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the product variant
+          sku:
+            type: string
+            description: The SKU of the product variant
+          ian:
+            type:
+              - 'null'
+              - string
+            description: 'The IAN (EAN) of the product variant, can be null'
+          createdAt:
+            type: string
+            format: datetime
+            description: Timestamp of when this product variant was created
+          updatedAt:
+            type: string
+            format: datetime
+            description: Timestamp of when this product variant was updated
+          archivedAt:
+            type:
+              - 'null'
+              - string
+            description: Timestamp of when this product variant was archived
+          retailPrice:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The suggested retail price of the product
+          wholesalePrice:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The wholesale price after the discount rate is applied
+          originalWholesalePrice:
+            $ref: '../../v1.yaml#/components/schemas/money'
+            description: The original wholesale price set by the brand
+          availableQuantity:
+            type:
+              - 'null'
+              - integer
+            description: Number of items available
+          reservedQuantity:
+            type: integer
+            description: Number of items in stock that are reserved
+          stockQuantity:
+            type:
+              - 'null'
+              - integer
+            description: Total number of items in stock
+          isAlwaysInStock:
+            type: boolean
+            description: 'True if the product is always in stock, false otherwise'
+      relationships:
+        type: object
+        properties:
+          product:
+            description: 'Reference: Product Resource'
+            type: object
+            properties:
+              data:
+                $ref: '../../v1.yaml#/components/schemas/relationshipToOne'
+    required:
+      - type
+      - id
+  ProductVariantStockUpdateSetStockQuantity:
+    title: ProductVariantStockUpdateSetStockQuantity
+    type: object
+    description: A request schema to update product variant stock value by setting explicit stock quantity.
+    properties:
+      id:
+        $ref: '../../v1.yaml#/components/schemas/id'
+      type:
+        $ref: '../../v1.yaml#/components/schemas/type'
+      attributes:
+        type: object
+        required:
+          - stockQuantity
+        properties:
+          stockQuantity:
+            type: number
+            minimum: 0
+            example: 100
+    required:
+      - id
+      - type
+      - attributes
+    examples:
+      - type: productVariant
+        id: 1e7b432b-50d4-4495-b032-6cbbc5f6f023
+        attributes:
+          stockQuantity: 100
+  ProductVariantStockUpdateSetIsAlwaysInStock:
+    title: ProductVariantStockUpdateSetIsAlwaysInStockRequest
+    type: object
+    examples:
+      - type: productVariants
+        id: ec5d2b52-4911-4eff-9846-71787f9f02df
+        attributes:
+          isAlwaysInStock: true
+    properties:
+      id:
+        $ref: '../../v1.yaml#/components/schemas/id'
+      type:
+        $ref: '../../v1.yaml#/components/schemas/type'
+      attributes:
+        type: object
+        required:
+          - isAlwaysInStock
+        properties:
+          isAlwaysInStock:
+            type: boolean
+            description: Whether the current product variant is always in stock
+    required:
+      - id
+      - type
+      - attributes
+    description: A request schema to update product variant stock value by setting option "always in stock" to true. It will also reset any possibly previously existed explicit stock quantities.
+parameters:
+  productVariantInPath:
+    name: productVariant
+    in: path
+    required: true
+    schema:
+      $ref: '../../v1.yaml#/components/schemas/id'
+responses:
+  ProductVariantResponse:
+    description: Single product-variant resource response with stock details
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/ProductVariant'
+            jsonapi:
+              $ref: '../../v1.yaml#/components/schemas/jsonapi'
+          required:
+            - data

@@ -1,0 +1,41 @@
+get:
+  summary: Read all batches sorted by ascending creation date
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/ProductIntegrationBatchItemsCollectionResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  description: Returns list of existing batches for current authenticated user
+  operationId: get-api-internal-v1-catalog-integration-batches
+  parameters:
+    - schema:
+        type: integer
+        minimum: 1
+        default: 1
+      in: query
+      name: page
+      description: Results page number.
+    - schema:
+        type: integer
+        minimum: 1
+        maximum: 50
+        default: 50
+      in: query
+      name: perPage
+      description: Number of items returned per page.
+    - schema:
+        type: string
+        default: created_at
+      in: query
+      name: sort
+      description: Property to sort results by.
+  tags:
+    - Catalog Integration

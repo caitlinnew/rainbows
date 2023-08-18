@@ -1,0 +1,47 @@
+parameters:
+  itemCounterId:
+    schema:
+      type: string
+      format: uuid
+    name: itemCounterId
+    in: path
+    required: true
+    description: Item Counter ID (same as Retailer ID)
+responses:
+  ItemCounterResponse:
+    description: Item Counter resource response
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              $ref: '#/schemas/ItemCounterResource'
+            jsonapi:
+              $ref: '../../internal.yaml#/components/schemas/jsonapi'
+          required:
+            - data
+schemas:
+  ItemCounterResource:
+    title: ItemCounterResource
+    type: object
+    description: Item Counter resource
+    properties:
+      type:
+        $ref: '../../internal.yaml#/components/schemas/type'
+      id:
+        $ref: '../../internal.yaml#/components/schemas/id'
+      attributes:
+        type: object
+        required:
+          - main
+          - savedForLater
+        properties:
+          main:
+            type: integer
+          savedForLater:
+            type: integer
+    required:
+      - type
+      - id
+      - attributes

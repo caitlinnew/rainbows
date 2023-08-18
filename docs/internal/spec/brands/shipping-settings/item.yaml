@@ -1,0 +1,116 @@
+get:
+  summary: Get Brand's shipping settings
+  operationId: get-brands-shipping-settings
+  description: Gets Brand's shipping settings
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/shippingSettingsId'
+  tags:
+    - Brands
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/ShippingSettingsResponse'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+patch:
+  summary: Update Brand's shipping settings
+  operationId: update-brands-shipping-settings
+  description: Updates Brand's shipping settings
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/shippingSettingsId'
+  tags:
+    - Brands
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/ShippingSettingsResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../../internal.yaml#/components/responses/UnprocessableEntity'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            publicAddress:
+              type: object
+              properties:
+                street:
+                  type: string
+                postalCode:
+                  type: string
+                city:
+                  type: string
+                countryCode:
+                  type: string
+              required:
+                - street
+                - postalCode
+                - city
+                - countryCode
+            shippingAddress:
+              type: object
+              properties:
+                street:
+                  type: string
+                postalCode:
+                  type: string
+                city:
+                  type: string
+                countryCode:
+                  type: string
+              required:
+                - street
+                - postalCode
+                - city
+                - countryCode
+            billingAddress:
+              type: object
+              properties:
+                street:
+                  type: string
+                postalCode:
+                  type: string
+                city:
+                  type: string
+                countryCode:
+                  type: string
+              required:
+                - street
+                - postalCode
+                - city
+                - countryCode
+            eoriNumber:
+              type: string
+            lucidNumber:
+              type: string
+            averageLeadTime:
+              type: string
+            whitelistCountries:
+              type:
+                - 'null'
+                - array
+              items:
+                type: string
+              description: List of country iso codes
+          required:
+            - publicAddress
+            - shippingAddress
+            - billingAddress
+            - eoriNumber
+            - lucidNumber
+            - averageLeadTime

@@ -1,0 +1,37 @@
+post:
+  summary: Create Fulfillment Brand
+  operationId: fulfillment-create-brand
+  description: Creates a new fulfillment brand
+  tags:
+    - Fulfillment
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/FulfillmentBrandResponse'
+    '201':
+      $ref: '../components.yaml#/responses/FulfillmentBrandResponse'
+    '400':
+      $ref: '../../internal.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../components.yaml#/schemas/FulfillmentBrandStoreRequest'
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json

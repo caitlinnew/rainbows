@@ -1,0 +1,26 @@
+get:
+  summary: Configuration for the specified user
+  operationId: get-user-config
+  description: Returns configuration of the specified user
+  tags:
+    - User
+  parameters:
+    - schema:
+        type: string
+        format: uuid
+      name: id
+      in: path
+      required: true
+      description: User ID
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/UserConfigResponse'
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../v1.yaml#/components/responses/ServerError'

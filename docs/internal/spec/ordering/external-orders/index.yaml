@@ -1,0 +1,31 @@
+post:
+  summary: Create Non Ankorstore Fulfillment Order (NAFO)
+  operationId: ordering-create-non-ankorstore-fulfillment-order
+  description: Creates a new non ankorstore fulfillment order
+  tags:
+    - Ordering
+  responses:
+    '201':
+      $ref: '../components.yaml#/responses/MasterOrderResponse'
+    '400':
+      $ref: '../../internal.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../../internal.yaml#/components/responses/UnprocessableEntity'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../components.yaml#/requests/NonAnkorstoreFulfillmentOrderRequest'
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'

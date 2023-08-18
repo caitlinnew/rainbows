@@ -1,0 +1,143 @@
+post:
+  summary: '[Deprecated] Confirm Order Shipping'
+  deprecated: true
+  operationId: brand-ship-order-confirm
+  description: '[Deprecated] Please use the Confirm Shipping Quote endpoint.'
+  tags:
+    - Shipping
+  parameters:
+    - $ref: '../../v1.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/orderIdInPath'
+    - $ref: './components.yaml#/parameters/orderIncludeResourcesInQuery'
+  responses:
+    '200':
+      description: Order Resource
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: './components.yaml#/schemas/OrderGet'
+          examples:
+            example:
+              value:
+                jsonapi:
+                  version: '1.0'
+                data:
+                  type: order
+                  id: 1ecb023e-7ec0-6d5c-a477-0242ac170007
+                  attributes:
+                    status: brand_confirmed
+                    reference: 3434273911
+                    brandCurrency: EUR
+                    brandNetAmount: 10229
+                    brandTotalAmount: 10940
+                    brandTotalAmountVat: 602
+                    brandTotalAmountWithVat: 11542
+                    brandRejectReason: null
+                    retailerRejectReason: null
+                    retailerCancellationRequestReason: null
+                    billingName: Charles Attan
+                    billingOrganisationName: Jumbo
+                    billingStreet: Kortricklaan 101
+                    billingPostalCode: 8121 GW
+                    billingCity: Arnhem
+                    billingCountryCode: NL
+                    submittedAt: '2022-03-17T13:19:33+00:00'
+                    shippedAt: null
+                    brandPaidAt: null
+                    createdAt: '2022-02-01T14:37:10+00:00'
+                    updatedAt: '2022-03-31T15:10:07+00:00'
+                    shippingMethod: custom
+                    shippingOverview:
+                      availableShippingMethods:
+                        - custom
+                        - ankorstore
+                      shipToAddress:
+                        name: John Smith
+                        organisationName: Test
+                        street: Test Street
+                        city: Commentry
+                        postalCode: '03633'
+                        countryCode: FR
+                      expectedShippingDates:
+                        minimum: '2022-03-22T00:00:00+00:00'
+                        maximum: '2022-03-24T23:59:59+00:00'
+                      provider: ups
+                      tracking:
+                        number: '12345'
+                        link: 'https://www.ups.com/track?tracknum=123456&requester=WT/trackdetails'
+                      latestQuote:
+                        id: 5cc76f26-0f5d-1ecb-a0d6-0242ac170009
+                        provider: custom
+                        rateAmount:
+                          amount: 1359
+                          currency: EUR
+                        rateProvider: ankorstore
+                        shippingCostsOverview:
+                          amount: 1037
+                          currency: EUR
+                          type: refund
+                      parcels:
+                        - length: 30
+                          width: 60
+                          height: 40
+                          weight: 16500
+                          distanceUnit: cm
+                          massUnit: g
+                          trackedPackage: null
+                        - length: 30
+                          width: 60
+                          height: 40
+                          weight: 20000
+                          distanceUnit: cm
+                          massUnit: g
+                          trackedPackage: null
+                      transaction: null
+    '401':
+      $ref: '../../v1.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../v1.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../v1.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../v1.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../../v1.yaml#/components/responses/UnprocessableEntity'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            order:
+              oneOf:
+                - type: object
+                  description: Tracking Provider + Number
+                  required:
+                    - trackingProvider
+                    - trackingNumber
+                  properties:
+                    trackingProvider:
+                      type: string
+                      description: Tracking provider is required with trackingNumber if your define an order key in your payload. You can define trackingLink instead of define trackingProvider & trackingNumber
+                    trackingNumber:
+                      description: The tracking number (may contain characters as well)
+                      type: string
+                - type: object
+                  description: Tracking Link
+                  required:
+                    - trackingLink
+                  properties:
+                    trackingLink:
+                      type: string
+                      format: url
+                      description: Tracking link is required if your define an order key in your payload
+        examples:
+          example-with-provider-and-number:
+            value:
+              order:
+                trackingProvider: ups
+                trackingNumber: '123456'
+          example-with-link:
+            value:
+              order:
+                trackingLink: 'https://www.dhl.com/fr-en/home/tracking/tracking-parcel.html?submit=1&tracking-id=1Z8A76E46801183396'

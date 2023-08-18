@@ -1,0 +1,65 @@
+post:
+  summary: Declare product variant as fulfillment item
+  operationId: product-variants-declare-fulfillment-item
+  tags:
+    - Fulfillment
+    - Product
+  parameters:
+    - schema:
+        type: string
+      in: header
+      name: Accept
+      description: application/vnd.api+json
+    - schema:
+        type: string
+        format: uuid
+      name: productVariantUuid
+      in: path
+      required: true
+      description: Product variant uuid
+  requestBody:
+    required: true
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              barcode:
+                type: string
+                pattern: '^\d{13,14}$'
+              unitsPerBatch:
+                type: integer
+              unitCost:
+                type: number
+                format: float
+              classificationCode:
+                type:
+                  - string
+                  - 'null'
+              expiryTracked:
+                type: boolean
+              shelfLife:
+                type:
+                  - integer
+                  - 'null'
+              batchTracked:
+                type: boolean
+          required:
+            - barcode
+            - unitCost
+  responses:
+    '200':
+      description: Success to declare product variant as fulfillment item
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '422':
+      $ref: '../../internal.yaml#/components/responses/UnprocessableEntity'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'

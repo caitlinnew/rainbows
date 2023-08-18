@@ -1,0 +1,18 @@
+post:
+  summary: Create a new import batch with a xlsx spreadsheet
+  responses:
+    '200':
+      description: OK
+      $ref: '../components.yaml#/responses/FileSpreadsheetBatchesResponse'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+  operationId: post-api-internal-v1-catalog-integration-xlsx-batches
+  tags:
+    - Catalog Integration
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+  requestBody:
+    $ref: '../components.yaml#/requests/FileSpreadsheetBatchesRequest'
+  description: Create a new import batch with a xlsx spreadsheet

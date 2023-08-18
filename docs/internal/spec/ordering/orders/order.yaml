@@ -1,0 +1,40 @@
+get:
+  operationId: ordering-view-order
+  description: Returns an order by given UUID
+  responses:
+    '200':
+      $ref: '../components.yaml#/responses/MasterOrderResponse'
+    '400':
+      $ref: '../../internal.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - in: query
+      name: include
+      description: Include related resources in the response
+      schema:
+        type: string
+        enum:
+          - orderItems
+          - orderShipping
+    - in: query
+      name: fields[orders]
+      description: Choose only specific attributes from order payload
+      schema:
+        type: string
+    - in: query
+      name: fields[order-shipping]
+      description: Choose only specific attributes from order payload
+      schema:
+        type: string

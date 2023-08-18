@@ -1,0 +1,92 @@
+patch:
+  summary: Update Application Webhook Subscription
+  operationId: update-application-webhook-subscription
+  description: Update application subscription with given ID
+  tags:
+    - Webhook Subscriptions
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/ApplicationWebhookSubscriptionResponse'
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../internal.yaml#/components/responses/ServerError'
+  parameters:
+    - $ref: './components.yaml#/parameters/webhookSubscriptionId'
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  requestBody:
+    content:
+      application/vnd.api+json:
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                id:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                      description: URL of the service where webhook request will be sent when one of the events from the list occurs
+                      format: uri
+                      example: 'https://my.app/webhook/listener'
+                    events:
+                      type: array
+                      minItems: 1
+                      uniqueItems: true
+                      items:
+                        type: string
+                        example: order.brand_created
+                        enum:
+                          - order.brand_created
+                          - order.brand_accepted
+                          - order.brand_rejected
+                          - order.shipping_labels_generated
+                          - order.shipped
+                          - order.shipment_received
+                          - order.shipment_refused
+                          - order.brand_paid
+                          - order.cancelled
+                  required:
+                    - url
+                    - events
+            required:
+              - id
+              - type
+          required:
+            - data
+delete:
+  summary: Delete Application Webhook Subscription
+  operationId: delete-application-webhook-subscription
+  description: Delete application webhook subscription by given ID
+  tags:
+    - Webhook Subscriptions
+  parameters:
+    - $ref: './components.yaml#/parameters/webhookSubscriptionId'
+    - $ref: '../internal.yaml#/components/parameters/acceptInHeader'
+  responses:
+    '200':
+      description: OK
+    '401':
+      $ref: '../internal.yaml#/components/responses/Unauthorized'
+    '404':
+      $ref: '../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../internal.yaml#/components/responses/ServerError'

@@ -1,0 +1,22 @@
+get:
+  summary: Get Retailer's purchasing list
+  operationId: get-purchasing-list
+  description: Get Retailer's purchasing list
+  parameters:
+    - $ref: '../../internal.yaml#/components/parameters/acceptInHeader'
+    - $ref: './components.yaml#/parameters/purchasingListId'
+  tags:
+    - Cart
+  responses:
+    '200':
+      $ref: './components.yaml#/responses/PurchasingListResponse'
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../../internal.yaml#/components/responses/NotFound'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'

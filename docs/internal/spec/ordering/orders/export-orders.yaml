@@ -1,0 +1,56 @@
+get:
+  summary: Export orders for the currently authenticated brand
+  operationId: get-export-orders-for-brand
+  description: Downloads exported orders for the currently authenticated brand
+  tags:
+    - Ordering
+  responses:
+    '200':
+      description: Return downloaded CSV or XLSX file
+    '401':
+      $ref: '../../internal.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../../internal.yaml#/components/responses/Forbidden'
+    '406':
+      $ref: '../../internal.yaml#/components/responses/NotAcceptable'
+    '415':
+      $ref: '../../internal.yaml#/components/responses/UnsupportedMediaType'
+    '500':
+      $ref: '../../internal.yaml#/components/responses/ServerError'
+  parameters:
+    - in: header
+      name: Accept
+      description: application/vnd.api+json
+      schema:
+        type: string
+    - in: query
+      name: export_year
+      description: Year for which orders to be exported
+      schema:
+        type: integer
+    - in: query
+      name: export_month
+      description: Month for which orders to be exported
+      schema:
+        type: integer
+    - in: query
+      name: export_format
+      description: Export format i.e. csv, xlsx
+      schema:
+        type: string
+        enum:
+          - csv
+          - xlsx
+    - in: query
+      name: status_key
+      schema:
+        type: integer
+        enum:
+          - created
+          - prepared
+          - shipped
+          - delivered
+          - completed
+          - cancelled
+          - pending_validation
+          - reception_refused
