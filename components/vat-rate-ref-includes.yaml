@@ -19,6 +19,7 @@ vat_rate_name:
 
 vat_rate_rate:
   description: The actual normal vat rate
+  type: number
   example: 25.0
 
 vat_rate_is_standard:
