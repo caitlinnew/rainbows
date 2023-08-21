@@ -15,7 +15,7 @@ venue_id:
 vat_rate_name:
   description: The name of the normal VAT rate
   type: string
-  example: "Standard Danish VAT Rate"
+  example: "Standard Danish VAT Rate 2"
 
 vat_rate_rate:
   description: The actual normal vat rate
