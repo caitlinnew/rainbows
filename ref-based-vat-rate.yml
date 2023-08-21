@@ -2,21 +2,21 @@ openapi: 3.0.0
 info:
   title: OnlinePOS Vat Rate Rest API (ON REFS!)
   description: This API allows 3rd parties to manage Vat Rates Only<br><br>Registration is required
-  termsOfService: "https://legal.onlinepos.com/da/api-terms/"
+  termsOfService: 'https://legal.onlinepos.com/da/api-terms/'
   contact:
     name: API Support
-    url: "https://legal.onlinepos.com/da/api-support/"
+    url: 'https://legal.onlinepos.com/da/api-support/'
     email: info@onlinepos.dk
   license:
     name: unlicensed
-    url: "https://legal.onlinepos.com/da/api-license/"
+    url: 'https://legal.onlinepos.com/da/api-license/'
   version: 1.0.22-test
 servers:
-  - url: "{protocol}://{products_base_url}"
+  - url: '{protocol}://{products_base_url}'
     description: Test defined URL for test system
     variables:
       products_base_url:
-        default: "localhost:8667"
+        default: 'localhost:8667'
       protocol:
         enum:
           - http
@@ -27,7 +27,7 @@ servers:
       client_id:
         default: demo
       venue:
-        default: "9000"
+        default: '9000'
 security:
   - bearerAuth: []
 tags:
@@ -36,16 +36,20 @@ tags:
 paths:
   /vat-rates:
     post:
-      $ref: "./paths/vat-rates.yaml#/vat-rates/post"
+      $ref: ./paths/vat-rates.yaml#/vat-rates/post
     get:
-      $ref: "./paths/vat-rates.yaml#/vat-rates/get"
-  /vat-rates/{id}:
+      $ref: ./paths/vat-rates.yaml#/vat-rates/get
+      tags:
+        - Vat Rates
+  '/vat-rates/{id}':
     get:
-      $ref: "./paths/vat-rates.yaml#/vat-rates~1{id}/get"
+      $ref: './paths/vat-rates.yaml#/vat-rates~1{id}/get'
+      tags:
+        - Vat Rates
     put:
-      $ref: "./paths/vat-rates.yaml#/vat-rates~1{id}/put"
+      $ref: './paths/vat-rates.yaml#/vat-rates~1{id}/put'
     delete:
-      $ref: "./paths/vat-rates.yaml#/vat-rates~1{id}/delete"
+      $ref: './paths/vat-rates.yaml#/vat-rates~1{id}/delete'
 components:
   securitySchemes:
     bearerAuth:
