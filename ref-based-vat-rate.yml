@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: OnlinePOS Vat Rate Rest API (ON REF!)
+  title: OnlinePOS Vat Rate Rest API (ON REFS!)
   description: This API allows 3rd parties to manage Vat Rates Only<br><br>Registration is required
   termsOfService: 'https://legal.onlinepos.com/da/api-terms/'
   contact:
