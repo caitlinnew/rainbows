@@ -1,0 +1,361 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Toyota Pay Payment Methods
+  description: Toyota Pay Payment Methods APIs
+  termsOfService: 'https://www.toyotafinancial.com/us/en/online_policies_and_agreements.html'
+  contact:
+    name: Toyota Financial Services
+    url: 'https://www.toyotafinancial.com/'
+    email: info@toyotafinancial.com
+  license:
+    url: 'https://www.toyota.com/support/legal-terms/'
+    name: TFS
+servers:
+  - url: 'https://rest.sandbox.eu.zuora.com'
+  - url: 'https://rest.sandbox.na.zuora.com'
+paths:
+  /oauth/token:
+    post:
+      tags:
+        - Bearer Authorization Token
+      summary: Add Payment Method Token
+      description: Generates an Open Authorization access token for subsequent transactions.
+      operationId: add_pm_token
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content type
+          schema:
+            type: string
+            example: application/x-www-form-urlencoded
+          examples:
+            default:
+              value: application/x-www-form-urlencoded
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  description: To whom the security credentials will be granted (typically *client*)
+                  example: client_credentials
+                client_id:
+                  type: string
+                  description: Unique ID assigned to the client
+                  example: c2e3db33-cec1-4929-b032-16a940ba0833
+                client_secret:
+                  type: string
+                  description: Unique machine-generated ID to be passed to the server
+            examples:
+              Request:
+                value:
+                  grant_type: client_credentials
+                  client_id: c2e3db33-cec1-4929-b032-16a940ba0833
+                  client_secret: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: Client Access Token necessary for subsequent transactions.
+                    example: f64c858b86f14ad9b7573e832483fdca
+                  token_type:
+                    type: string
+                    description: Authorization Token type (in this case - `bearer`)
+                    example: bearer
+                  expires_in:
+                    type: integer
+                    description: Number of seconds the current Authorization Token will be valid for.
+                    example: 3598
+                  scope:
+                    type: string
+                    description: Which system transactions the token will be valid for.
+                    example: entity.8adc8323-8257-9720-0182-5abebdb36145 platform.write service.events.read service.events.write service.notifications.read service.notifications.write service.usage.delete service.usage.update service.usage.write tenant.2000266 user.8adce421682cb3ef01682e3d19571512
+                  jti:
+                    type: string
+                    description: Unique system-assigned ID.
+                    example: f64c858b86f14ad9b7573e832483fdca
+                x-examples:
+                  example-1:
+                    access_token: f64c858b86f14ad9b7573e832483fdca
+                    token_type: bearer
+                    expires_in: 3598
+                    scope: entity.8adc8323-8257-9720-0182-5abebdb36145 platform.write service.events.read service.events.write service.notifications.read service.notifications.write service.usage.delete service.usage.update service.usage.write tenant.2000266 user.8adce421682cb3ef01682e3d19571512
+                    jti: f64c858b86f14ad9b7573e832483fdca
+              examples:
+                200 - Successful Response:
+                  value:
+                    access_token: f64c858b86f14ad9b7573e832483fdca
+                    token_type: bearer
+                    expires_in: 3598
+                    scope: entity.8adc8323-8257-9720-0182-5abebdb36145 platform.write service.events.read service.events.write service.notifications.read service.notifications.write service.usage.delete service.usage.update service.usage.write tenant.2000266 user.8adce421682cb3ef01682e3d19571512
+                    jti: f64c858b86f14ad9b7573e832483fdca
+      servers:
+        - url: 'https://rest.sandbox.eu.zuora.com'
+        - url: 'https://rest.sandbox.na.zuora.com'
+  /v1/payment-methods:
+    post:
+      tags:
+        - Payment Methods
+      summary: Create a Credit / Debit Card Payment Method
+      description: |
+        This API verb creates either:
+        * a **Credit / Debit Card  payment method**, or
+        * an **ACH payment method**,
+        depending on the chosen request.
+
+        > ### Note:
+        > 
+        > To see an example for each request, please click the *"Examples"* menu in the mocking box on the right, and select the corresponding example.
+        > ![](../assets/images/Selecting_examples.png)
+      operationId: create_CC_payment_method
+      parameters:
+        - name: Content-Type
+          in: header
+          description: JSON Data specifier
+          schema:
+            type: string
+            example: application/json
+          examples:
+            default:
+              value: application/json
+        - name: Authorization
+          in: header
+          description: Bearer Authentication string
+          schema:
+            type: string
+            example: Bearer 408a6f0012af4876bc3e9e49cc3cc161
+          examples:
+            default:
+              value: Bearer 408a6f0012af4876bc3e9e49cc3cc161
+        - name: Zuora-Entity-Ids
+          in: header
+          description: Zuora platform-specific Entity IDs
+          schema:
+            type: string
+            example: 8adc83238257972001825abebdb36145
+          examples:
+            default:
+              value: 8adc83238257972001825abebdb36145
+      requestBody:
+        description: |-
+          > ### Note:
+          > 
+          > There are two (2) distinct request bodies for two (2) corresponding use cases:
+          > 1) For *Credit / Debit Card Payment Method:*<br/>
+          >    ==> choose **Create a Debit/Credit Card Payment Method request**
+          > 2) For *ACH Payment Method:*<br/>
+          >    ==> choose **Create an ACH Payment Method request**
+          > ![](../assets/images/Request_selector.png)
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/Create-CC-Payment-Method-request'
+                - $ref: '#/components/schemas/Create-ACH-Payment-Method-request'
+            examples:
+              Credit Card:
+                value:
+                  cardHolderInfo:
+                    addressLine1: 4105 Black Oak Hollow Road
+                    addressLine2: Ste. 15E
+                    cardHolderName: Donald D. Gray
+                    city: Sunnyvale
+                    state: CA
+                    country: USA
+                    zipCode: '94086'
+                  cardNumber: '000000000000'
+                  cardType: Visa
+                  type: CreditCard
+                  expirationMonth: '01'
+                  expirationYear: '2045'
+                  accountKey: 8a28e3ec895498dd01895be70d537c96
+                  authGateway: 8a28f2c588dcbfcc0188df5adf2765ad
+              ACH:
+                value:
+                  bankABACode: '000000000'
+                  bankAccountNumber: '0000000000'
+                  bankAccountType: Checking
+                  bankName: Bank of America
+                  bankAccountName: Captin America
+                  type: ACH
+                  accountKey: 8a28e3ec895498dd01895be70d537c96
+                  authGateway: 8a28acec88b4367f0188bb4697ef552f
+          application/xml:
+            schema:
+              type: object
+          multipart/form-data:
+            schema:
+              type: object
+          text/html:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Returns `true` if the transaction was successful.
+                  id:
+                    type: string
+                    description: Unique transaction ID
+                    example: 8adcf4a683162fd1018318a3ad0e073e
+                x-examples:
+                  example-1:
+                    success: true
+                    id: 8adcf4a683162fd1018318a3ad0e073e
+              examples:
+                200 - Successful Response:
+                  value:
+                    success: true
+                    id: 8adcf4a683162fd1018318a3ad0e073e
+      servers:
+        - url: 'https://rest.sandbox.eu.zuora.com'
+        - url: 'https://rest.sandbox.na.zuora.com'
+tags:
+  - name: Bearer Authorization Token
+    description: Generate a Bearer Authorization Token
+  - name: Payment Methods
+    description: Create a Credit / Debit Card or an ACH payment method
+components:
+  schemas:
+    Create-CC-Payment-Method-request:
+      type: object
+      title: Create a Debit/Credit Card Payment Method request
+      properties:
+        cardHolderInfo:
+          type: object
+          description: Container object for information related to the card owner
+          properties:
+            addressLine1:
+              type: string
+              description: Card Holder Address Line 1
+              example: 4105 Black Oak Hollow Road
+            addressLine2:
+              type: string
+              description: Additional details for the card holder's address
+              example: Ste. 15E
+            cardHolderName:
+              type: string
+              description: Card holder name
+              example: Donald D. Gray
+            city:
+              type: string
+              description: City in which the card holder works or resides
+              example: Sunnyvale
+            state:
+              type: string
+              description: State (where applicable) where the card holder works or resides
+              example: CA
+            country:
+              type: string
+              description: Card holder's country of residence
+              example: USA
+            zipCode:
+              type: string
+              description: Card holder's zip / postal code
+              example: '94086'
+        cardNumber:
+          type: string
+          description: Card number
+          example: '000000000000'
+        cardType:
+          type: string
+          description: 'Card brand - *Visa*, *MasterCard*, etc.'
+          example: Visa
+        type:
+          type: string
+          description: Card Type - `CreditCard` or `DebitCard`
+          example: CreditCard
+        expirationMonth:
+          type: string
+          description: Card expiration month in the format `01` - `12`.
+          example: '01'
+        expirationYear:
+          type: string
+          description: Card expiration year
+          example: '2045'
+        accountKey:
+          type: string
+          description: Unique machine-generated card holder account key
+          example: 8a28e3ec895498dd01895be70d537c96
+        authGateway:
+          type: string
+          description: Unique machine-generated gateway authentication key
+          example: 8a28f2c588dcbfcc0188df5adf2765ad
+      x-examples:
+        Create a Credit/Debit Card Payment Method:
+          cardHolderInfo:
+            addressLine1: ''
+            addressLine2: ''
+            cardHolderName: Captin America
+            city: Frisco
+            state: TX
+            country: United States
+            zipCode: '75034'
+          cardNumber: '000000000000'
+          cardType: Visa
+          type: CreditCard
+          expirationMonth: '01'
+          expirationYear: '2045'
+          accountKey: 8a28e3ec895498dd01895be70d537c96
+          authGateway: 8a28f2c588dcbfcc0188df5adf2765ad
+    Create-ACH-Payment-Method-request:
+      type: object
+      title: Create an ACH Payment Method request
+      properties:
+        bankABACode:
+          type: string
+          description: The nine-digit routing number or ABA (*American Bankers Association*) number used by banks
+          example: '000000000'
+        bankAccountNumber:
+          type: string
+          description: The bank account number associated with the ACH payment
+          example: '0000000000'
+        bankAccountType:
+          type: string
+          description: 'The type of bank account associated with the payment, typically `Checking`, `Savings`, etc.'
+          example: Checking
+        bankName:
+          type: string
+          description: The name of the bank where the payment account is held
+          example: Bank of America
+        bankAccountName:
+          type: string
+          description: 'The name of the account holder, which can be either a person or a company'
+          example: Donald D. Gray
+        type:
+          type: string
+          description: 'Payment method type, i.e. `ACH` in this case'
+          example: ACH
+        accountKey:
+          type: string
+          description: System-generated Account Key for this ACH Payment
+          example: 8a28e3ec895498dd01895be70d537c96
+        authGateway:
+          type: string
+          description: System-generated payment gateway authentication key
+          example: 8a28acec88b4367f0188bb4697ef552f
+      x-examples:
+        Example 1:
+          bankABACode: '000000000'
+          bankAccountNumber: '0000000000'
+          bankAccountType: Checking
+          bankName: Bank of America
+          bankAccountName: Captin America
+          type: ACH
+          accountKey: 8a28e3ec895498dd01895be70d537c96
+          authGateway: 8a28acec88b4367f0188bb4697ef552f
